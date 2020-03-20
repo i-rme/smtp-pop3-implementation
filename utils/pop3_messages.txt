@@ -1,0 +1,43 @@
+client
+	server
+
+
+	+OK Service Ready.<CRLF>
+
+[IF NOT LOGGED]
+	-ERR User not logged in. Send USER command.<CRLF>
+
+USER<SP><username><CRLF>
+	+OK Password required<CRLF>
+
+PASS<SP><password><CRLF>
+	+OK User logged in.<CRLF>
+[OR]
+	–ERR Login Failed.
+[OR]
+	-ERR Unkown user.<CRLF>
+
+STAT<CRLF>
+	+OK<SP><number of messages><SP><total size><CRLF>
+
+LIST<CRLF>
+	+OK<CRLF>
+	1<SP><message 1 size><CRLF>
+	2<SP><message 2 size ><CRLF>
+	.<CRLF>
+
+RETR <SP><number of the message><CRLF>
+	+OK
+[OR]
+	-ERR message not found.<CRLF>
+
+[DELETING MESSAGES]
+DELE<SP><message number>
+	+OK Message deleted
+[OR]
+	-ERR message not deleted. The message doesn’t exist.
+
+QUIT <CRLF>
+	+OK<CRLF>
+
+
