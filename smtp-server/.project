@@ -14,4 +14,36 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/Binarycopy.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/Binarycopy.java</locationURI>
+		</link>
+		<link>
+			<name>src/ByteClient.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/ByteClient.java</locationURI>
+		</link>
+		<link>
+			<name>src/ByteServer.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/ByteServer.java</locationURI>
+		</link>
+		<link>
+			<name>src/CharacterClient.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/CharacterClient.java</locationURI>
+		</link>
+		<link>
+			<name>src/CharacterServer.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/CharacterServer.java</locationURI>
+		</link>
+		<link>
+			<name>src/WhoIAm.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/GA_Code/WhoIAm.java</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

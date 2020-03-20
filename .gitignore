@@ -22,3 +22,9 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 smtp-server/.classpath
+smtp-server/src/GA_Code/WhoIAm.java
+smtp-server/src/GA_Code/CharacterServer.java
+smtp-server/src/GA_Code/CharacterClient.java
+smtp-server/src/GA_Code/ByteServer.java
+smtp-server/src/GA_Code/ByteClient.java
+smtp-server/src/GA_Code/Binarycopy.java

@@ -1,6 +1,11 @@
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.*;
 
 public class Main {
 
@@ -22,7 +27,18 @@ public class Main {
 	public static void main(String[] args) {
 
 		String SERVER_NAME = "server.local";
+		int SERVER_PORT = 25;
 		
+		ServerSocket Serv_Socket = null;
+		Socket Socket_Connection = null;
+		BufferedReader input = null;
+	    PrintWriter output = null;
+		
+		String data = "";
+		
+		
+		
+		testSocketConnectionServer(SERVER_PORT, Serv_Socket, Socket_Connection, data, input, output);
 		
 		sendServerMessage(220, SERVER_NAME + " Service Ready");
 		waitClientMessageRegex("(HELO) (([a-zA-Z0-9]+)(\\.([a-zA-Z0-9]+))*)");	// HELO client.example.com\r\n
@@ -90,5 +106,30 @@ public class Main {
 		}
 
         return message;
+	}
+	
+	public static void testSocketConnectionServer(int port, ServerSocket sv_soc, Socket conn_soc, String data, BufferedReader input, PrintWriter output)
+	{
+		try {
+			sv_soc = new ServerSocket(port);
+			System.out.println("Trying to connect the Client...");
+			
+			while(data.compareTo("END") != 0)
+			{
+				conn_soc = sv_soc.accept();	
+				System.out.println("Connection accepted.");
+				input = new BufferedReader(new InputStreamReader(conn_soc.getInputStream()));
+				output = new PrintWriter(conn_soc.getOutputStream(), true);
+				data =  input.readLine();
+			    System.out.println("Server receives: "+data);
+		        output.println(data);			
+		        conn_soc.close();		
+			}
+			
+			sv_soc.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
