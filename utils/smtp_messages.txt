@@ -1,0 +1,32 @@
+	server
+client
+
+	220 <SP> <Server Name> <SP> “Service Ready” <CRLF>
+HELO <SP> <Client Name> <CRLF>
+
+MAIL <SP> FROM: <SP> < <user name>@<server IP> > <CRLF>
+	250 <SP> OK <CRLF>
+
+RCPT <SP> TO: <SP> < <user name>@<server IP> > <CRLF>
+	250 <SP> OK <CRLF>
+
+DATA <CRLF>
+	354 <SP> “Start mail input; end with <CRLF>.<CRLF>”
+
+Subject:<Subject><CRLF>
+From:<email1@domain1><CRLF>
+To:<email2@domain2>,<email3@domain3>,…,<email-n@domain-n><CRLF>
+	250<SP>OK<CRLF>
+
+[IF NO VALID RECIPIENTS]
+	554 Not valid recipients
+
+[IF NOT VALID USERS]
+	550 <SP> <user>: Recipient address rejected: User unknown in virtual mailbox table.
+
+QUIT <CRLF>
+	221 <SP> <server name> Service closing transmission cannel
+
+
+250 <SP> “Requested mail action okay, completed” <CRLF>
+
