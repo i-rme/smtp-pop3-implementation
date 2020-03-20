@@ -1,11 +1,18 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.*;
 
 public class Main {
 
@@ -27,18 +34,12 @@ public class Main {
 	public static void main(String[] args) {
 
 		String SERVER_NAME = "server.local";
-		int SERVER_PORT = 25;
+		String DATABASE_FILE = "database.txt";
+		int SMTP_PORT = 25;
 		
-		ServerSocket Serv_Socket = null;
-		Socket Socket_Connection = null;
-		BufferedReader input = null;
-	    PrintWriter output = null;
-		
-		String data = "";
-		
-		
-		
-		testSocketConnectionServer(SERVER_PORT, Serv_Socket, Socket_Connection, data, input, output);
+		//Serialization("abc", DATABASE_FILE);
+		//System.out.println( Deserialization(DATABASE_FILE) );
+		//testSocketConnectionServer(SERVER_PORT);
 		
 		sendServerMessage(220, SERVER_NAME + " Service Ready");
 		waitClientMessageRegex("(HELO) (([a-zA-Z0-9]+)(\\.([a-zA-Z0-9]+))*)");	// HELO client.example.com\r\n
@@ -108,12 +109,61 @@ public class Main {
         return message;
 	}
 	
-	public static void testSocketConnectionServer(int port, ServerSocket sv_soc, Socket conn_soc, String data, BufferedReader input, PrintWriter output)
+	
+	public static void Serialization(Object obj, String filepath){
+		try {		
+
+			FileOutputStream f = new FileOutputStream(new File(filepath), false);	//true:append
+			ObjectOutputStream o = new ObjectOutputStream(f);
+
+			o.writeObject(obj);
+
+			o.close();
+			f.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		} catch (IOException e) {
+			System.out.println("Error initializing stream");
+		}
+	}
+	
+	public static Object Deserialization(String filepath){
+		try {
+			
+			FileInputStream fi = new FileInputStream(new File(filepath));
+			ObjectInputStream oi = new ObjectInputStream(fi);
+
+			Object obj = oi.readObject();
+			
+			oi.close();
+			fi.close();
+			
+			return obj;
+
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		} catch (IOException e) {
+			System.out.println("Error initializing stream");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public static void testSocketConnectionServer(int port)
 	{
+		ServerSocket sv_soc = null;
+		Socket conn_soc = null;
+		BufferedReader input = null;
+	    PrintWriter output = null;
+	    String data = "data";
+		
 		try {
 			sv_soc = new ServerSocket(port);
 			System.out.println("Trying to connect the Client...");
-			
+
 			while(data.compareTo("END") != 0)
 			{
 				conn_soc = sv_soc.accept();	
@@ -125,11 +175,12 @@ public class Main {
 		        output.println(data);			
 		        conn_soc.close();		
 			}
-			
+
 			sv_soc.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 }
