@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +24,6 @@ public class Main {
 	 * Web para probar expresiones regulares con java: https://www.freeformatter.com/java-regex-tester.html
 	 * 
 	 * Funciones
-	 * 
 	 * sendServerMessage: Forma un mensaje del servidor con un codigo y una string, añade <CRLF> al final
 	 * waitClientMessage: Pide una string de respuesta y la devuelve
 	 * waitClientMessageRegex: Pide una string de respuesta, la parsea segun la expresion regular y devuelve lo importante
@@ -181,6 +182,37 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static Map<String, String> parseEmailIMF(String imf) {
+		Map<String, String> mailElements = new HashMap<String, String>();
+		String lines[] = imf.split("\\r?\\n");
+		
+		for (String line : lines) {
+			if (line.contains(": ")) {
+				String[] parts = line.split(": ");
+				mailElements.put(parts[0], parts[1]);
+			} else {	//Concatenate the body as they are multiple lines
+				mailElements.put("Body", mailElements.getOrDefault("Body", "")+"\n"+line);
+			}
+		}
+		
+		return mailElements;
+	}
+	
+	public static String formatEmailIMF(Map<String, String> mailElements) {
+		StringBuilder sb = new StringBuilder();  
+		for (String name: mailElements.keySet()){
+            String key = name.toString();
+            String value = mailElements.get(name).toString();  
+            if(key == "Body") {
+                sb.append(value + "\n");
+            }else {
+                sb.append(key + ": " + value + "\n");
+            }
+		} 
+		
+		return sb.toString();
 	}
 	
 }
