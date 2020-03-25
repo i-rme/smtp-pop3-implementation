@@ -8,5 +8,9 @@ public class Mailbox {
 		
 		//We create an array for the mails in this mailbox
 		Email arrayMails[] = new Email[MAILBOXSIZE];
+	} 
+	
+	public int stat() {
+		return arrayMails.length;
 	}
 }

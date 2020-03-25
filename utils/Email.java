@@ -4,12 +4,14 @@ public class Email {
 	private String fromSender;
 	private String toReceiver;
 	private String bodyContent;
+	private String ID;
 	
-	public Email(String subject, String fromSender, String toReceiver, String bodyContent) {
+	public Email(String subject, String fromSender, String toReceiver, String bodyContent, String ID) {
 		super();
 		this.sender = sender;
 		this.receiver = receiver;
 		this.text = text;
+		this.ID = ID;
 	}
 
 
