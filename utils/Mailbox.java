@@ -20,9 +20,9 @@ public class Mailbox {
 		return counter;
 	}	
 	
-	public int[] list() {
+	public String[] list() {
 		int SIZE = stat(); //check where are elements
-		int [] IDs = new int[SIZE]; //we will return the IDs of those elements
+		String [] IDs = new String[SIZE]; //we will return the IDs of those elements
 		for(int i = 0; i<SIZE; i++)
 		{
 		   IDs[i]=arrayMails[i].ID;
@@ -30,11 +30,18 @@ public class Mailbox {
 		return IDs;
 	}
 	
-	public Email returnMail(int ID) {
-		return (arrayMails[ID]); //just return the email itself on that position
+	public Email returnMail(String ID) {
+		int SIZE = stat(); //check where are elements
+		for(int i = 0; i<SIZE; i++)
+		{
+			if(arrayMails[i].ID==ID) {
+				return (arrayMails[i]);//just return the email itself on that position
+			}			
+		}
+		 
 	}
 	
-	public void deleteMessage(int ID) {
+	public void deleteMessage(String ID) {
 		int SIZE = stat(); //check where are elements
 		for(int i = 0; i<SIZE; i++)
 		{
