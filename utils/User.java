@@ -2,15 +2,14 @@ public class User {
 
 	private String usernameID;
 	private String mailDirection;
-	private String mailbox;
+	private Mailbox mailbox;
 	private String password;
 	
-	public User(String usernameID, String mailDirection, String mailbox, String password) {
-		this.sender = sender;
-		this.receiver = receiver;
-		this.text = text;
-		this.ID = ID;
+	public User(String usernameID, String mailDirection, Mailbox mailbox, String password) {
+		this.usernameID = usernameID;
+		this.mailDirection = mailDirection;
 		this.password = password;
+		this.mailbox = mailbox;
 	}
 	
 	public bool checkPassword(String password)
