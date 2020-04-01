@@ -1,53 +1,41 @@
-import java.util.Arrays;
-import org.apache.commons.lang.ArrayUtils;
+import java.util.ArrayList;
 
 public class Mailbox {
 
-	//Define the size of our Mailbox, final because we only declare it one time
-	private static final int MAILBOXSIZE = 999;			
-	//We create an array for the mails in this mailbox
-	private Email arrayMails[] = new Email[MAILBOXSIZE];
+	
+	private ArrayList<Email> arrayMails = new ArrayList<Email>();
 	
 	public int stat() {
-		int counter=0;
-		for(int i = 0; i<arrayMails.length; i++)
-		{
-		    if(arrayMails[i]!=null)
-		    {
-		        counter++;
-		    }
-		}
-		return counter;
-	}	
+		return arrayMails.size();
+	}
 	
-	public String[] list() {
-		int SIZE = stat(); //check where are elements
-		String [] IDs = new String[SIZE]; //we will return the IDs of those elements
-		for(int i = 0; i<SIZE; i++)
+	public ArrayList<String> list() {
+		ArrayList<String> IDs = new ArrayList<String>(); //we will return the IDs of those elements
+		for(int i = 0; i<arrayMails.size(); i++)
 		{
-		   IDs[i]=arrayMails[i].ID;
+		   IDs.add(arrayMails.get(i).getID());
 		}
 		return IDs;
 	}
 	
 	public Email returnMail(String ID) {
-		int SIZE = stat(); //check where are elements
-		for(int i = 0; i<SIZE; i++)
+		for(int i = 0; i<arrayMails.size(); i++)
 		{
-			if(arrayMails[i].ID==ID) {
-				return (arrayMails[i]);//just return the email itself on that position
+			if(arrayMails.get(i).getID() == ID ) {
+				return (arrayMails.get(i));//just return the email itself on that position
 			}			
 		}
+		return null;
 		 
 	}
 	
 	public void deleteMessage(String ID) {
-		int SIZE = stat(); //check where are elements
-		for(int i = 0; i<SIZE; i++)
+		for(int i = 0; i<arrayMails.size(); i++)
 		{
-			if(arrayMails[i].ID==ID) {
-				ArrayUtils.remove(arrayMails, i);
+			if(arrayMails.get(i).getID() == ID) {
+				arrayMails.remove(i);
 			}			
 		}		
 	}
 }
+

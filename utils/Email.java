@@ -8,9 +8,10 @@ public class Email {
 	
 	public Email(String subject, String fromSender, String toReceiver, String bodyContent, String ID) {
 		super();
-		this.sender = sender;
-		this.receiver = receiver;
-		this.text = text;
+		this.subject = subject;
+		this.fromSender = fromSender;
+		this.toReceiver = toReceiver;
+		this.bodyContent = bodyContent;
 		this.ID = ID;
 	}
 
