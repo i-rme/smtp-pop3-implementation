@@ -1,218 +1,68 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import utils.NetworkUtils;
 
 public class Main {
 
-	/*
-	 * Comentarios
-	 * 
-	 * Web para probar expresiones regulares con java: https://www.freeformatter.com/java-regex-tester.html
-	 * 
-	 * Funciones
-	 * sendServerMessage: Forma un mensaje del servidor con un codigo y una string, añade <CRLF> al final
-	 * waitClientMessage: Pide una string de respuesta y la devuelve
-	 * waitClientMessageRegex: Pide una string de respuesta, la parsea segun la expresion regular y devuelve lo importante
-	 * waitMultilineClientMessage: Pide varias string, aun sin terminar
-	 */
-	
-	private static Scanner scanner;
-
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		String SERVER_NAME = "server.local";
 		String DATABASE_FILE = "database.txt";
 		int SMTP_PORT = 25;
 		
-		//Serialization("abc", DATABASE_FILE);
-		//System.out.println( Deserialization(DATABASE_FILE) );
-		//testSocketConnectionServer(SERVER_PORT);
+		System.out.println("(THIS IS SMTP SERVER)");
 		
-		sendServerMessage(220, SERVER_NAME + " Service Ready");
-		waitClientMessageRegex("(HELO) (([a-zA-Z0-9]+)(\\.([a-zA-Z0-9]+))*)");	// HELO client.example.com\r\n
-        
-        
-		sendServerMessage(250, "Request mail action okay, completed");
-		waitClientMessageRegex("(MAIL FROM:) <([a-zA-Z0-9]+@(([a-zA-Z0-9]+)(.([a-zA-Z0-9]+))+))>");	// MAIL FROM: <user@example.com>\r\n
-        
-		sendServerMessage(250, "OK");
-		waitClientMessageRegex("((DATA))");	// DATA\r\n
-              
-        sendServerMessage(354, "Start mail input; end with <CRLF>.<CRLF>");
-        waitMultilineClientMessage();
-        //Subject:<Subject>\r\n
-        //From:<email@domain.com>\r\n
-        //To:<user1@server.local>,<user2@server.local>\r\n
-        // LINEA VACIA AQUI
-        // Esto es un mensaje de prueba, /nDos lineas..
-        // \r\n.\r\n.
-        
-		sendServerMessage(250, "OK");
-		waitClientMessageRegex("((QUIT))");	// QUIT\r\n
-        
-		sendServerMessage(221, SERVER_NAME + " Service closing transmission channel");
-        
-	}
-	
-	public static void sendServerMessage(int code, String comment){
-        String message = code + " " + comment + "\r\n";
-        
-        System.out.print(message);
-	}
-	
-	public static String waitClientMessage(){
-        scanner = new Scanner(System. in);
-        String message = scanner.nextLine();
-        
-        return message;
-	}
-	
-	public static String waitClientMessageRegex(String pattern){
-        scanner = new Scanner(System. in);
-        String message = scanner.nextLine();
-        
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(message);
-
-        if (m.matches()) {
-        	return m.group(2);	// 0: whole matched expression, 1: first expression in brackets, 2: second exp, ...
-        }else {
-        	System.out.println("Error: Incorrect message for client");
-        	return null;
-        }
-        
-	}
-	
-	public static String waitMultilineClientMessage(){
-		scanner = new Scanner(System. in);
-		String message = "";
+        ServerSocket sServ = new ServerSocket(SMTP_PORT);
+        Socket sCon = sServ.accept();
+        PrintWriter output = new PrintWriter(sCon.getOutputStream(), true);
+        BufferedReader input = new BufferedReader(new InputStreamReader(sCon.getInputStream()));
 		
-		while(scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			message = message.concat(line + "\r\n");
-			if( message.contains("\r\n.\r\n") ) break;
-		}
 
-        return message;
-	}
-	
-	
-	public static void Serialization(Object obj, String filepath){
-		try {		
-
-			FileOutputStream f = new FileOutputStream(new File(filepath), false);	//true:append
-			ObjectOutputStream o = new ObjectOutputStream(f);
-
-			o.writeObject(obj);
-
-			o.close();
-			f.close();
-
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
-		} catch (IOException e) {
-			System.out.println("Error initializing stream");
-		}
-	}
-	
-	public static Object Deserialization(String filepath){
-		try {
-			
-			FileInputStream fi = new FileInputStream(new File(filepath));
-			ObjectInputStream oi = new ObjectInputStream(fi);
-
-			Object obj = oi.readObject();
-			
-			oi.close();
-			fi.close();
-			
-			return obj;
-
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
-		} catch (IOException e) {
-			System.out.println("Error initializing stream");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+        NetworkUtils.sendMessage(1, SERVER_NAME + " Service Ready", output);
+        System.out.println( NetworkUtils.waitMessage(input) );
+        
+        NetworkUtils.sendMessage(3, SERVER_NAME + " Hola amigo", output);
+        System.out.println( NetworkUtils.waitMessage(input) );
+        
+        NetworkUtils.sendMessage(5, SERVER_NAME + " adios", output);
+        System.out.println( NetworkUtils.waitMessage(input) );
+        
+        System.out.println( NetworkUtils.waitMessage(input) );
+        
+        System.out.println( "AQUI no deberia llegar ya que deberia esperar" );
+        
+        
+        sServ.close();
 		
-		return null;
-	}
-	
-	public static void testSocketConnectionServer(int port)
-	{
-		ServerSocket sv_soc = null;
-		Socket conn_soc = null;
-		BufferedReader input = null;
-	    PrintWriter output = null;
-	    String data = "data";
-		
-		try {
-			sv_soc = new ServerSocket(port);
-			System.out.println("Trying to connect the Client...");
-
-			while(data.compareTo("END") != 0)
-			{
-				conn_soc = sv_soc.accept();	
-				System.out.println("Connection accepted.");
-				input = new BufferedReader(new InputStreamReader(conn_soc.getInputStream()));
-				output = new PrintWriter(conn_soc.getOutputStream(), true);
-				data =  input.readLine();
-			    System.out.println("Server receives: "+data);
-		        output.println(data);			
-		        conn_soc.close();		
-			}
-
-			sv_soc.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public static Map<String, String> parseEmailIMF(String imf) {
-		Map<String, String> mailElements = new HashMap<String, String>();
-		String lines[] = imf.split("\\r?\\n");
-		
-		for (String line : lines) {
-			if (line.contains(": ")) {
-				String[] parts = line.split(": ");
-				mailElements.put(parts[0], parts[1]);
-			} else {	//Concatenate the body as they are multiple lines
-				mailElements.put("Body", mailElements.getOrDefault("Body", "")+"\n"+line);
-			}
-		}
-		
-		return mailElements;
-	}
-	
-	public static String formatEmailIMF(Map<String, String> mailElements) {
-		StringBuilder sb = new StringBuilder();  
-		for (String name: mailElements.keySet()){
-            String key = name.toString();
-            String value = mailElements.get(name).toString();  
-            if(key == "Body") {
-                sb.append(value + "\n");
-            }else {
-                sb.append(key + ": " + value + "\n");
-            }
-		} 
-		
-		return sb.toString();
+//		sendMessage(220, SERVER_NAME + " Service Ready");
+//		waitClientMessageRegex("(HELO) (([a-zA-Z0-9]+)(\\.([a-zA-Z0-9]+))*)");	// HELO client.example.com\r\n
+//        
+//        
+//		sendMessage(250, "Request mail action okay, completed");
+//		waitClientMessageRegex("(MAIL FROM:) <([a-zA-Z0-9]+@(([a-zA-Z0-9]+)(.([a-zA-Z0-9]+))+))>");	// MAIL FROM: <user@example.com>\r\n
+//        
+//		sendMessage(250, "OK");
+//		waitClientMessageRegex("((DATA))");	// DATA\r\n
+//              
+//        sendServerMessage(354, "Start mail input; end with <CRLF>.<CRLF>");
+//        waitMultilineClientMessage();
+//        //Subject:<Subject>\r\n
+//        //From:<email@domain.com>\r\n
+//        //To:<user1@server.local>,<user2@server.local>\r\n
+//        // LINEA VACIA AQUI
+//        // Esto es un mensaje de prueba, /nDos lineas..
+//        // \r\n.\r\n.
+//        
+//		sendServerMessage(250, "OK");
+//		waitClientMessageRegex("((QUIT))");	// QUIT\r\n
+//        
+//		sendServerMessage(221, SERVER_NAME + " Service closing transmission channel");
+        
 	}
 	
 }
