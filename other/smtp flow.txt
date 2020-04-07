@@ -1,0 +1,30 @@
+// SMTP flow pseudocode
+
+if(CLIENT_CONNECTS){
+	
+	if(CLIENT_HELO){
+
+		switch(CLIENT_COMMAND) {
+
+		  case QUIT:
+		    // quit
+		    break;
+
+		  case MAIL:
+		    while(CLIENT_RCPT){
+		    	//read recipients
+		    }
+		    if(CLIENT_DATA){
+		    	//read mail headers
+		    }
+		    sendMail();
+		    break;
+
+		  default:
+		    // error
+
+		}
+
+	}
+
+}

@@ -4,6 +4,10 @@ public class Server {
 
 	public ArrayList<User> users = new ArrayList<User>();
 	
+	public Server() {
+		createDatabase();
+	}
+	
 	public void createDatabase(){
 	
 		User user1 = new User("paco123","paco@gmail.com", "pack1");
@@ -29,6 +33,10 @@ public class Server {
 			}
 		}
 		return false;
+	}
+	
+	public User getUser(String username, String password){
+		return users.get(0);
 	}
 	
 }

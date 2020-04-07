@@ -8,6 +8,16 @@ public class ConsoleUtils {
 
 	private static Scanner scanner;
 	
+	public static void logServer(String comment){
+        String message = "[SERVER] " + comment;
+        System.out.print(message);
+	}
+	
+	public static void logClient(String comment){
+        String message = "[client] " + comment;
+        System.out.print(message);
+	}
+	
 	public static void sendMessage(int code, String comment){
         String message = code + " " + comment + "\r\n";
         
