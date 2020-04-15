@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pop3client.Pop3Client;
+
 public class NetworkUtils {
 	
 	public static ServerSocket getServerSocket(int port){
@@ -21,10 +23,35 @@ public class NetworkUtils {
 		}
 	}
 	
+	public static Socket acceptServerSocket(ServerSocket serverSocket){
+		try {
+			return serverSocket.accept();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void closeServerSocket(ServerSocket serverSocket){
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void closeSocket(Socket socket){
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static Socket getSocket(String endpoint, int port, int retry_time){
         while (true) {
             try {
-            	TimeUnit.SECONDS.sleep(retry_time);
+            	Utils.sleep(retry_time*1000);
             	System.out.println("INFO: Trying to connect to the server...");
             	Socket socket = new Socket(endpoint, port);
             	System.out.println("INFO: Connected sucessfully");
@@ -58,12 +85,31 @@ public class NetworkUtils {
 	}
 	
 	public static void sendMessage(String comment, PrintWriter output){
-        String message = comment + "\r\n";
+        String message = comment;
         
         ConsoleUtils.logServer(message);
         output.println(message);
 	}
 	
+	public static String waitMessage(CustomThread thread){
+		BufferedReader input = thread.getInput();
+		String message;
+	    do {
+	    	try {
+				message = input.readLine();
+			} catch (IOException e) {
+				message = "@error_endpoint_disconnected";
+				//e.printStackTrace();
+				break;
+			}
+	    	
+	    	Utils.sleep(100);
+	    }
+	    while ( message.length() == 0 );
+		
+        ConsoleUtils.logClient(message + "\r\n");
+	    return message;
+	}
 	
 	public static String waitMessage(BufferedReader input){
 		String message;
@@ -71,11 +117,12 @@ public class NetworkUtils {
 	    	try {
 				message = input.readLine();
 			} catch (IOException e) {
-				message = "error:ioexception_waitClientMessage";
-				e.printStackTrace();
+				message = "@error_endpoint_disconnected";
+				//e.printStackTrace();
+				break;
 			}
 	    	
-	    	try { Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); }
+	    	Utils.sleep(100);
 	    }
 	    while ( message.length() == 0 );
 		
@@ -85,6 +132,8 @@ public class NetworkUtils {
 	
 	public static String waitMessageRegex(String pattern, BufferedReader input){
         String message = waitMessage(input);
+        
+        if(message.charAt(0) == '@') { return message; }	// if is error return it as is
         
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(message);

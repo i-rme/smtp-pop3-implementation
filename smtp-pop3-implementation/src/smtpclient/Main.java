@@ -12,7 +12,10 @@ public class Main {
 	public static final String 	SERVICE = "SMTP";
 	public static final String 	HOSTNAME = SERVICE + TYPE + ".local";
 	public static final String 	DATABASE = "database.txt";
-	public static final String 	ENDPOINT = "127.0.0.1";
+	//public static final String 	ENDPOINT = "127.0.0.1";
+	public static final String 	ENDPOINT = "smtp.unverified.email";
+	//public static final String 	ENDPOINT = "ethereal.email";
+	//public static final String 	ENDPOINT = "mailspons.com";
 	public static final int 	RETRY_TIME = 2;
 	
 	public static Socket socket;
@@ -26,31 +29,37 @@ public class Main {
     	socket = NetworkUtils.getSocket(ENDPOINT, PORT, RETRY_TIME);
         input = NetworkUtils.getInput(socket);
         output = NetworkUtils.getOutput(socket);
-        
+
         NetworkUtils.waitMessage(input);
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
         NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
-       
+
         NetworkUtils.waitMessage(input);
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
         NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
         
         NetworkUtils.waitMessage(input);
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
+        NetworkUtils.sendMessage("RCPT TO: <user2@"+ENDPOINT+">", output);
+        
+        NetworkUtils.waitMessage(input);
+        TimeUnit.SECONDS.sleep(2);
         NetworkUtils.sendMessage("DATA", output);
         
         NetworkUtils.waitMessage(input);
-        TimeUnit.SECONDS.sleep(3);
-        NetworkUtils.sendMessage("Subject:<Subject>", output);
-        NetworkUtils.sendMessage("From:<email@domain.com>", output);
-        NetworkUtils.sendMessage("To:<user1@server.local>,<user2@server.local>", output);
-        NetworkUtils.sendMessage(" ", output);
+        TimeUnit.SECONDS.sleep(2);
+        NetworkUtils.sendMessage("Subject: Example Message", output);
+        NetworkUtils.sendMessage("From: <user@SMTPCLIENT.local>", output);
+        NetworkUtils.sendMessage("To: <user2@SMTPCLIENT.local>", output);
+        NetworkUtils.sendMessage("", output);
         NetworkUtils.sendMessage("This is the body", output);
-        NetworkUtils.sendMessage("\r\n.", output);
+        NetworkUtils.sendMessage(".", output);
         
         NetworkUtils.waitMessage(input);
         TimeUnit.SECONDS.sleep(3);
         NetworkUtils.sendMessage("QUIT", output);
+        
+        NetworkUtils.waitMessage(input);	//Bye
         
         System.out.println("AQUI no deberia llegar ya que deberia esperar");
   

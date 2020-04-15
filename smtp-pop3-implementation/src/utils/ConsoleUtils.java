@@ -9,12 +9,15 @@ public class ConsoleUtils {
 	private static Scanner scanner;
 	
 	public static void logServer(String comment){
-        String message = "[SERVER] " + comment;
+        String message = "(<- OUT) " + comment + "\r\n";
         System.out.print(message);
 	}
 	
 	public static void logClient(String comment){
-        String message = "[client] " + comment;
+        String message = "[IN  ->] " + comment;
+        
+        if(comment.charAt(0) == '@') { message = "INFO: " + comment; }	// if is error return it as is
+        
         System.out.print(message);
 	}
 	
