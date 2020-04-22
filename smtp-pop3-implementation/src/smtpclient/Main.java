@@ -11,6 +11,7 @@ public class Main {
 	public static final String 	TYPE = "CLIENT";
 	public static final String 	SERVICE = "SMTP";
 	public static final String 	HOSTNAME = SERVICE + TYPE + ".local";
+	public static final String  USERNAME = "paco123";
 	public static final String 	DATABASE = "database.txt";
 	//public static final String 	ENDPOINT = "127.0.0.1";
 	public static final String 	ENDPOINT = "smtp.unverified.email";
@@ -32,13 +33,16 @@ public class Main {
 
         NetworkUtils.waitMessage(input);
         TimeUnit.SECONDS.sleep(2);
-        NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
+        NetworkUtils.sendMessage("HELO " + USERNAME, output);
 
         NetworkUtils.waitMessage(input);
         TimeUnit.SECONDS.sleep(2);
-        NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
+        NetworkUtils.sendMessage("QUIT", output);
+        //NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
         
         NetworkUtils.waitMessage(input);
+        NetworkUtils.waitMessage(input);
+        
         TimeUnit.SECONDS.sleep(2);
         NetworkUtils.sendMessage("RCPT TO: <user2@"+ENDPOINT+">", output);
         

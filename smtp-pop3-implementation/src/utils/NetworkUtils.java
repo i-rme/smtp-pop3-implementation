@@ -147,4 +147,24 @@ public class NetworkUtils {
         
 	}
 	
+	public static boolean checkCommand(String command, String message){
+        
+        if(message.charAt(0) == '@') { return false; }	// if is error return it as is
+        
+        Pattern p = Pattern.compile(command);
+        Matcher m = p.matcher(message);
+        
+        if (m.group(1) == command) {
+        	return true;	// 0: whole matched expression, 1: first expression in brackets, 2: second exp, ...
+        }else {
+        	return false;
+        }
+        
+	}
+	
+	
+	
+	
+	
+	
 }
