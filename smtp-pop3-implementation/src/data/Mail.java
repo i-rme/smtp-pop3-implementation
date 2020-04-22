@@ -5,9 +5,9 @@ public class Mail {
 	private String sender;
 	private String recipient;
 	private String body;
-	private String id;
+	private int id;
 	
-	public Mail(String subject, String sender, String recipient, String body, String id) {
+	public Mail(String subject, String sender, String recipient, String body, int id) {
 		this.subject = subject;
 		this.sender = sender;
 		this.recipient = recipient;
@@ -48,7 +48,7 @@ public class Mail {
 		this.body = body;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 

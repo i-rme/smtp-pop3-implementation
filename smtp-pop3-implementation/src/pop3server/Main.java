@@ -7,7 +7,6 @@ public class Main {
 		Pop3Server pop3Server = new Pop3Server();
 		pop3Server.start();
 
-		
 	}
 
 }

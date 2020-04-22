@@ -7,7 +7,6 @@ public class Main {
 		Pop3Client pop3Client = new Pop3Client();
 		pop3Client.start();
 		
-
 	}
 
 }

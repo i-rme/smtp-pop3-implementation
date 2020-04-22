@@ -32,7 +32,6 @@ public class Pop3Server extends CustomThread {
 
     	System.out.println("INFO: Starting the "+SERVICE+" "+TYPE);
     	
-    	//Faltan: LIST, DELE, RSET
     	while(RUNNING) {
 
     	serverSocket = NetworkUtils.getServerSocket(PORT);
@@ -63,17 +62,37 @@ public class Pop3Server extends CustomThread {
         
         do {
                 String command = NetworkUtils.waitMessageRegex("(([a-zA-Z]{4})).*", input);
+                
+                int mailId;
+                
                 switch(command) {
         
                 case "STAT":
+                	server.status(user);
                     NetworkUtils.sendMessage("+OK 288 69420", output);
                     break;
         
+                case "DELE":
+                	mailId = 0;		//TODO
+                	
+                	server.delete(user, mailId);
+                    NetworkUtils.sendMessage("+OK", output);
+                    break;
+                    
+                case "RSET":
+                	server.reset(user);
+                    NetworkUtils.sendMessage("+OK", output);
+                    break;
+                    
                 case "RETR":
+                	mailId = 0;		//TODO
+                	
+                	server.retrieve(user, mailId);
                     NetworkUtils.sendMessage("+OK", output);
                     break;
         
                 case "LIST":
+                	server.list(user);
                     NetworkUtils.sendMessage("+OK", output);
                     NetworkUtils.sendMessage("1 288", output);
                     NetworkUtils.sendMessage("2 144", output);
