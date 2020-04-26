@@ -51,6 +51,18 @@ public class Mail {
 	public int getId() {
 		return id;
 	}
+	
+    @Override
+    public String toString() { 
+		String imf =
+				"Subject: "+subject+"\r\n"
+				+ "From: <"+sender+">\r\n"
+				+ "To: <"+recipient+">\r\n"
+				+ "\r\n"
+				+ ""+body+"\r\n"
+				+ ".\r\n";
+        return imf;
+    } 
 
 
 }

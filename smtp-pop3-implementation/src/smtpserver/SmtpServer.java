@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 
+import data.Mail;
 import data.Server;
 import data.User;
 import utils.CustomThread;
+import utils.FormatUtils;
 import utils.NetworkUtils;
 
 public class SmtpServer extends CustomThread {
@@ -197,6 +200,45 @@ public class SmtpServer extends CustomThread {
 			e.printStackTrace();
 		}
         System.exit(0);	
+	}
+	
+	public void relay(String endpoint, int port, int retry_time, String hostname, String sender, String recipient, Mail mail) {
+    	socket = NetworkUtils.getSocket(endpoint, port, retry_time);
+        input = NetworkUtils.getInput(socket);
+        output = NetworkUtils.getOutput(socket);
+
+        NetworkUtils.waitMessage(input);
+        NetworkUtils.sendMessage("HELO " + hostname, output);
+
+        NetworkUtils.waitMessage(input);
+        NetworkUtils.sendMessage("MAIL FROM: <"+sender+">", output);
+        
+        NetworkUtils.waitMessage(input);
+        NetworkUtils.sendMessage("RCPT TO: <"+recipient+">", output);
+        
+        NetworkUtils.waitMessage(input);
+        NetworkUtils.sendMessage("DATA", output);
+        
+        NetworkUtils.waitMessage(input);
+        
+        Map<String, String> mailElements = FormatUtils.mailToMap(mail);
+		String imf_subject = mailElements.get("Subject").toString(); 
+		String imf_sender = mailElements.get("From").toString(); 
+		String imf_recipient = mailElements.get("To").toString(); 
+		String imf_body = mailElements.get("Body").toString(); 
+        
+        NetworkUtils.sendMessage("Subject: "+imf_subject, output);
+        NetworkUtils.sendMessage("From: <"+imf_sender+">", output);
+        NetworkUtils.sendMessage("To: <"+imf_recipient+">", output);
+        NetworkUtils.sendMessage("", output);
+        NetworkUtils.sendMessage(imf_body, output);
+        NetworkUtils.sendMessage(".", output);
+        
+        NetworkUtils.waitMessage(input);
+        NetworkUtils.sendMessage("QUIT", output);
+        
+        NetworkUtils.waitMessage(input);        
+        NetworkUtils.closeSocket(socket);
 	}
 
 }
