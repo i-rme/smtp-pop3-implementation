@@ -14,7 +14,7 @@ public class Server {
 		User user2 = new User("rocio123","rocio@gmail.com", "rocy21");
 		User user3 = new User("maria123","maria@gmail.com", "11mary2223");
 		User user4 = new User("victor123","victor@gmail.com", "vickingtor");
-		User user5 = new User("xavi123","xavi@gmail.com.com", "xaviondo69");
+		User user5 = new User("xavi123","xavi@gmail.com.com", "xaviondo77");
 		
 		users.add(user1);
 		users.add(user2);
