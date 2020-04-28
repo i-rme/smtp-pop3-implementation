@@ -6,8 +6,8 @@ public class Mailbox {
 	private ArrayList<Mail> mails = new ArrayList<Mail>();
 	
 	//crear constructor mailbox arraylist de unos 5 mails aniadirlso 
-	public Mailbox() {
-		createDatabase();
+	public Mailbox(String username) {
+		createDatabase(username);
 	}
 	
 	public String status() {
