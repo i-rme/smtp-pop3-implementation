@@ -10,11 +10,11 @@ public class Server {
 	
 	public void createDatabase(){
 	
-		User user1 = new User("paco123","paco@gmail.com", "pack1");
-		User user2 = new User("rocio123","rocio@gmail.com", "rocy21");
-		User user3 = new User("maria123","maria@gmail.com", "11mary2223");
-		User user4 = new User("victor123","victor@gmail.com", "vickingtor");
-		User user5 = new User("xavi123","xavi@gmail.com.com", "xaviondo77");
+		User user1 = new User("1","paco", "pack1");
+		User user2 = new User("2","rocio", "rocy21");
+		User user3 = new User("3","maria", "11mary2223");
+		User user4 = new User("4","victor", "vickingtor");
+		User user5 = new User("5","xavi", "xaviondo77");
 		
 		users.add(user1);
 		users.add(user2);
@@ -36,7 +36,19 @@ public class Server {
 	}
 	
 	public User getUser(String username, String password){
-		return users.get(0);
+		for(int i= 0; i<users.size(); i++)
+		{
+			if ( username.compareToIgnoreCase( users.get(i).getUsername() ) == 0 )
+			{
+				if(password.compareTo( users.get(i).getPassword() ) == 0) {
+					return users.get(i);
+				}
+				return null;
+			}else {
+				//System.out.println("ELSE: " +username + " distinto de " + users.get(i).getUsername());
+			}
+		}
+		return null;
 	}
 
 	public String status(User user) {

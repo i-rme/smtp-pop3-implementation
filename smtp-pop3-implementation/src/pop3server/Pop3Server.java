@@ -53,6 +53,7 @@ public class Pop3Server extends CustomThread {
                 user = server.getUser(username, password);
                 if(user != null) {
                         NetworkUtils.sendMessage("+OK User logged in.", output);
+                        //System.out.println(user.getUsername());
                 }else {
                         NetworkUtils.sendMessage("-ERR Login Failed.", output);
                 }
@@ -68,12 +69,15 @@ public class Pop3Server extends CustomThread {
                 switch(command) {
         
                 case "STAT":
-                	server.status(user);
-                    NetworkUtils.sendMessage("+OK 288 69420", output);
+                    NetworkUtils.sendMessage( server.status(user) , output);
                     break;
         
                 case "DELE":
-                	mailId = 0;		//TODO
+                		String a = "DELE 2";
+                        String r;
+                        r = a.substring(a.indexOf("E") + 4);
+
+                	mailId = Integer.parseInt(r);	//TODO
                 	
                 	server.delete(user, mailId);
                     NetworkUtils.sendMessage("+OK", output);
@@ -92,10 +96,10 @@ public class Pop3Server extends CustomThread {
                     break;
         
                 case "LIST":
-                	server.list(user);
-                    NetworkUtils.sendMessage("+OK", output);
-                    NetworkUtils.sendMessage("1 288", output);
-                    NetworkUtils.sendMessage("2 144", output);
+                	NetworkUtils.sendMessage( server.list(user) , output);
+                    //NetworkUtils.sendMessage("+OK", output);
+                    //NetworkUtils.sendMessage("1 288", output);
+                    //NetworkUtils.sendMessage("2 144", output);
                     break;
                     
                 case "QUIT":

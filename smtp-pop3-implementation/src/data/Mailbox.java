@@ -12,7 +12,10 @@ public class Mailbox {
 	
 	public String status() {
 		// TODO STAT from user's Mailbox
-		return mails.size()+"";
+		String output = "+OK " + mails.size() + " " + mails.get(0).getBody().length() + "\r\n";
+		return output;
+
+
 	}
 	
 	public void createDatabase(String username){
@@ -33,12 +36,15 @@ public class Mailbox {
 	
 	public String list() {
 		// TODO LIST all Mail from user's Mailbox
-		ArrayList<String> IDs = new ArrayList<String>();	//we will return the IDs of those elements
-		for(int i = 0; i<mails.size(); i++)
-		{
-		   IDs.add(mails.get(i).getId()+"");
+		//ArrayList<String> IDs = new ArrayList<String>();	//we will return the IDs of those elements
+		String output = "+OK \r\n";
+		
+		for(int i = 0; i<mails.size(); i++){
+		   //IDs.add(mails.get(i).getId()+"");
+			output += mails.get(i).getId() + " " + mails.get(i).getBody().length() + "\r\n";
+		   
 		}
-		return IDs.toString();
+		return output;
 	}
 	
 	public String retrieve(int id) {

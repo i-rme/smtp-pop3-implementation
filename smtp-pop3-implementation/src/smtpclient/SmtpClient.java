@@ -10,17 +10,17 @@ import utils.Utils;
 
 public class SmtpClient extends CustomThread{
 	
-	public final int 	PORT = 25;
+	public final int 		PORT = 25;
 	public final String 	TYPE = "CLIENT";
 	public final String 	SERVICE = "SMTP";
 	public final String 	HOSTNAME = SERVICE + TYPE + ".local";
-	public final String  USERNAME = "paco123";
+	public final String  	USERNAME = "paco123";
 	//public final String 	DATABASE = "database.txt";
-	public final String 	ENDPOINT = "127.0.0.1";
-	//public final String 	ENDPOINT = "smtp.unverified.email";
+	//public final String 	ENDPOINT = "127.0.0.1";
+	public final String 	ENDPOINT = "smtp.unverified.email";
 	//public final String 	ENDPOINT = "ethereal.email";
 	//public final String 	ENDPOINT = "mailspons.com";
-	public final int 	RETRY_TIME = 2;
+	public final int 		RETRY_TIME = 2;
 	
 	public Socket socket;
 	public BufferedReader input;
@@ -40,11 +40,11 @@ public class SmtpClient extends CustomThread{
 
         NetworkUtils.waitMessage(input);
         Utils.sleep(2000);
-        NetworkUtils.sendMessage("QUIT", output);
-        //NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
+        //NetworkUtils.sendMessage("QUIT", output);
+        NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
         
         NetworkUtils.waitMessage(input);
-        NetworkUtils.waitMessage(input);
+        //NetworkUtils.waitMessage(input);
         
         Utils.sleep(2000);
         NetworkUtils.sendMessage("RCPT TO: <user2@"+ENDPOINT+">", output);

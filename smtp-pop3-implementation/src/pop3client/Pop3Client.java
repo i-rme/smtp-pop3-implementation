@@ -32,11 +32,30 @@ public class Pop3Client extends CustomThread{
         input = NetworkUtils.getInput(socket);
         output = NetworkUtils.getOutput(socket);
         
-        //Faltan: LIST, DELE, RSET
         NetworkUtils.waitMessage(this);
         Utils.sleep(2000);
-        NetworkUtils.sendMessage("USER 12c3dcecd61290", output);
+        NetworkUtils.sendMessage("USER paco", output);
        
+        NetworkUtils.waitMessage(this);
+        Utils.sleep(2000);
+        NetworkUtils.sendMessage("PASS pack1", output);
+        
+        
+
+       
+        NetworkUtils.waitMessage(this);
+        Utils.sleep(2000);
+        NetworkUtils.sendMessage("DELE 2", output);
+        
+        NetworkUtils.waitMessage(this);
+        Utils.sleep(2000);
+        NetworkUtils.sendMessage("LIST", output);
+        
+        //NetworkUtils.waitMessage(this);
+        //Utils.sleep(2000);
+        //NetworkUtils.sendMessage("STAT", output);
+        
+        /*
         NetworkUtils.waitMessage(this);
         Utils.sleep(2000);
         NetworkUtils.sendMessage("PASS a4612d53d01efd", output);
@@ -58,8 +77,9 @@ public class Pop3Client extends CustomThread{
         NetworkUtils.sendMessage("STAT", output);
         
         System.out.println("AQUI no deberia llegar ya que deberia esperar");
+  		*/
   
-        //while(RUNNING) NetworkUtils.waitMessage(this);
+        while(RUNNING) NetworkUtils.waitMessage(this);
         
  
     }
