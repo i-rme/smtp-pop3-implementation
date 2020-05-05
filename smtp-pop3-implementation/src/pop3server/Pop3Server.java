@@ -62,7 +62,7 @@ public class Pop3Server extends CustomThread {
         
         
         do {
-                String command[] = NetworkUtils.waitMessageRegexArray("(([a-zA-Z]{4}))( )?(.*)", input);
+                String command[] = NetworkUtils.waitMessageRegexArray("(([a-zA-Z]{4})) ?(.*)", input);
                 
                 int mailId;
                 
@@ -73,7 +73,7 @@ public class Pop3Server extends CustomThread {
                     break;
         
                 case "DELE":
-                	mailId = Integer.parseInt(command[4]);
+                	mailId = Integer.parseInt(command[3]);		// [3] is the argument for the command
                 	server.delete(user, mailId);
                     NetworkUtils.sendMessage("+OK", output);
                     break;
