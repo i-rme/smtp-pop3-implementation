@@ -147,6 +147,37 @@ public class NetworkUtils {
         
 	}
 	
+	public static String[] waitMessageRegexArray(String pattern, BufferedReader input){
+        String message = waitMessage(input);
+        String[] array;
+        
+        if(message.charAt(0) == '@') { 	// if is error return it as is
+        	array = new String[1];
+        	array[0] = message;
+        	return array; 
+        }
+        
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(message);
+
+        int i = 0;
+        array = new String[m.groupCount()+1];
+        while (m.find()) {
+           for (int j = 0; j <= m.groupCount(); j++) {
+        	  array[i] = m.group(j);
+              i++;
+           }
+        }
+        
+        if(i > 0) {
+        	return array;	// 0: whole matched expression, 1: first expression in brackets, 2: second exp, ...
+        }else {
+        	System.out.println("Error: Incorrect message for client");
+        	return null;
+        }
+        
+	}
+	
 	public static boolean checkCommand(String command, String message){
         
         if(message.charAt(0) == '@') { return false; }	// if is error return it as is

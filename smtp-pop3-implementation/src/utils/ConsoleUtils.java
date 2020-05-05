@@ -16,7 +16,10 @@ public class ConsoleUtils {
 	public static void logClient(String comment){
         String message = "[IN  ->] " + comment;
         
-        if(comment.charAt(0) == '@') { message = "INFO: " + comment; }	// if is error return it as is
+        if(comment.charAt(0) == '@') {		// if is error return it as is
+        	message = "INFO: " + comment;
+        	Utils.sleep(500);
+        }
         
         System.out.print(message);
 	}
