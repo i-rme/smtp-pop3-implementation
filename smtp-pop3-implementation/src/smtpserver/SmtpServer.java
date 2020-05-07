@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import data.Mail;
 import data.Server;
 import data.User;
+import utils.ConsoleUtils;
 import utils.CustomThread;
 import utils.FormatUtils;
 import utils.NetworkUtils;
@@ -30,6 +33,8 @@ public class SmtpServer extends CustomThread {
 	public PrintWriter output;
 	public Server server;
 	public User user;
+	public String message;
+	public String userHostname;
 	
 	public static String username;
 	
@@ -38,59 +43,42 @@ public class SmtpServer extends CustomThread {
     	System.out.println("INFO: Starting the "+SERVICE+" "+TYPE);
 
     	serverSocket = NetworkUtils.getServerSocket(PORT);
-    	try {
-			socket = serverSocket.accept();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	socket = NetworkUtils.acceptServerSocket(serverSocket);
+    	
     	input = NetworkUtils.getInput(socket);
         output = NetworkUtils.getOutput(socket);
         server = new Server();
         NetworkUtils.sendMessageCode(220, SMTPMessage(220), output);
-        NetworkUtils.waitMessage(input);
+        message = NetworkUtils.waitMessage(input);
+        //Let's check the first command we receive is a HELO command, if not, we close the socket.
+        if(!NetworkUtils.checkCommand("HELO", message))
+        	SMTPCloseConnection(500);
         
+        userHostname = message.split("\\s")[1];
+        NetworkUtils.sendMessageCode(250, SMTPMessage(250), output);
+        /*
         boolean checkUser = false;
-        username = NetworkUtils.waitMessageRegex("(HELO) ([a-zA-Z0-9]+)", input);
+        username = NetworkUtils.parseMessageRegex("(HELO) ([a-zA-Z0-9]+)", message);
         checkUser = server.checkUser(username);
         
         if(checkUser) { 
         		NetworkUtils.sendMessageCode(250, SMTPMessage(250), output);
         }
         
-        else if(!checkUser) //550 <SP> <user>: Recipient address rejected: User unknown in virtual mailbox table.
+        else //550 <SP> <user>: Recipient address rejected: User unknown in virtual mailbox table.
         {
         	SMTPCloseConnection(550);
-        } else
-			try {
-				if(NetworkUtils.checkCommand("HELO", input.readLine())) {
-					SMTPCloseConnection(500);
-				}
-				else
-				{
-					SMTPCloseConnection(501);   
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-  
+        }*/
+        
         
         //SWITCH FOR MAIL OR QUIT  
-        NetworkUtils.waitMessage(input);
-        String command = null;
-		try {
-			command = input.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        int code = SMTPCompareCommand(command);
+        message = NetworkUtils.waitMessage(input);
+        int code = SMTPCompareCommand(message);
         
         switch (code)
         {
-        	case 0: // MAIL TO DO
+        	case 0: 
+        		SMTPCreateEmail();
         		break;
         		
         	case 1: // QUIT
@@ -171,12 +159,11 @@ public class SmtpServer extends CustomThread {
         
 	}
 	
-	public int SMTPCompareCommand(String command) {
-		System.out.println("DEBUG: "+command);
+	public int SMTPCompareCommand(String input) {
 		
-		if(NetworkUtils.checkCommand("MAIL", command)) return 0;
+		if(NetworkUtils.checkCommand("MAIL", input)) return 0;
 
-		if(command == "QUIT") return 1;
+		else if(NetworkUtils.checkCommand("QUIT", input)) return 1;
 
 		else return 99;
 		
@@ -187,19 +174,108 @@ public class SmtpServer extends CustomThread {
 			NetworkUtils.sendMessageCode(code, SMTPMessage(code), output);
 		
 		NetworkUtils.sendMessageCode(221, SMTPMessage(221), output);
-		try {
-			socket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        try {
-			serverSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		NetworkUtils.closeServerSocket(serverSocket);
+		NetworkUtils.closeSocket(socket);
         System.exit(0);	
+	}
+	
+	public void SMTPCreateEmail()
+	{
+		String endpoint = null;
+		int port = PORT;
+		int retry_time = 100;
+		
+		String hostname = userHostname;
+		String sender = "";
+		String recipient = "";
+		
+		String subject = "";
+		String from_mail = "";
+		String to_mail = "";
+		String body = "";
+
+		ArrayList<String> bodyList = new ArrayList<String>();
+		Mail mail = null;
+
+		
+		
+		NetworkUtils.sendMessageCode(250, SMTPMessage(250), output);// OK
+		String from[] = message.split("\\s");
+		sender = from[2].replaceAll("[<>]", "");
+		
+		//I don't know how this regex works and its syntax, needs to be checked. 
+		message = NetworkUtils.waitMessageRegex("RCPT TO: <([a-zA-Z0-9]+)@([a-zA-Z0-9]+)>",input);		
+		String rcpt[] = message.split("\\s");
+		recipient = from[3].replaceAll("[<>]", "");
+		
+		message = NetworkUtils.waitMessage(input);
+		if(!message.equals("DATA"))
+			SMTPCloseConnection(500);
+		
+		
+		//SUBJECT
+		message = NetworkUtils.waitMessageRegex("Subject: ([a-zA-Z0-9]+)", input);
+		if(message == null)
+			SMTPCloseConnection(501);
+		String[] subj = message.split(" ", 2);
+		subject = subj[1];
+		
+		
+		//FROM
+		message = NetworkUtils.waitMessageRegex("From: <([a-zA-Z0-9]+)@([a-zA-Z0-9]+)>", input);
+		if(message == null)
+			SMTPCloseConnection(501);
+		String[] fromMail = message.split(" ", 2);
+		from_mail = fromMail[1];
+		
+		
+		//TO
+		message = NetworkUtils.waitMessageRegex("To: <([a-zA-Z0-9]+)@([a-zA-Z0-9]+)>", input);
+		if(message == null)
+			SMTPCloseConnection(501);
+		String[] toMail = message.split(" ", 2);
+		to_mail = toMail[1];
+		
+		
+		
+		int endController = 0;
+		String bodyStr = "";
+		boolean nextDot = false;
+		do {
+			bodyStr = NetworkUtils.waitMessage(input);
+			bodyList.add(bodyStr);
+			
+			if(bodyStr.indexOf("\r\n") == bodyStr.length()-1 && !nextDot){
+				endController++;
+				nextDot = true;
+			}
+				
+			else if(nextDot && bodyStr.equals("." + "\r\n")){
+				endController++;
+			}
+			
+			else {
+				endController = 0;
+				nextDot = false;
+			}
+				
+			
+		}while (endController != 2);
+		
+		body = bodyList.toString();
+		mail = new Mail(subject, from_mail, to_mail, body);
+		
+		ConsoleUtils.logServer(hostname);
+		ConsoleUtils.logServer(sender);
+		ConsoleUtils.logServer(recipient);
+		ConsoleUtils.logServer(body);
+		
+		
+		
+		relay(endpoint, port, retry_time, hostname, sender, recipient, mail);
+		
+		
+	
 	}
 	
 	public void relay(String endpoint, int port, int retry_time, String hostname, String sender, String recipient, Mail mail) {

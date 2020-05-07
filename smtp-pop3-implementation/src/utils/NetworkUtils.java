@@ -188,20 +188,48 @@ public class NetworkUtils {
         
 	}
 	
-	public static boolean checkCommand(String command, String message){
+	public static boolean checkCommand(String command, String input){
         
-        if(message.charAt(0) == '@') { return false; }	// if is error return it as is
-        
-        Pattern p = Pattern.compile(command);
-        Matcher m = p.matcher(message);
-        
-        if (m.group(1) == command) {
-        	return true;	// 0: whole matched expression, 1: first expression in brackets, 2: second exp, ...
-        }else {
-        	return false;
-        }
+		String message = input;
+		
+		if(message == "")
+		{
+			return false;
+		}
+		
+		else
+		{
+	        if(message.charAt(0) == '@') { return false; }	// if is error return it as is
+	        
+	        String[] split = message.split("\\s");
+	        	
+	        if (split[0].equals(command)) {
+	        	return true;
+	        }else {
+	        	return false;
+	        }
+		}
         
 	}
+	
+	public static String parseMessageRegex(String pattern, String input) {
+		String message = input;
+        
+        if(message.charAt(0) == '@') { return message; }	// if is error return it as is
+        
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(message);
+
+        if (m.matches()) {
+        	return m.group(2);	// 0: whole matched expression, 1: first expression in brackets, 2: second exp, ...
+        }else {
+        	System.out.println("Error: Incorrect message for client");
+        	return null;
+        }
+	}
+	
+	
+	
 	
 	
 	

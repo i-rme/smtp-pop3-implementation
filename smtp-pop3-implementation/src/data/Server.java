@@ -27,7 +27,7 @@ public class Server {
 	public boolean checkUser(String username){
 		for(int i= 0; i<users.size(); i++)
 		{
-			if(username==(users.get(i).getId()))
+			if(username.equals(users.get(i).getUsername()))
 			{
 				return true;
 			}

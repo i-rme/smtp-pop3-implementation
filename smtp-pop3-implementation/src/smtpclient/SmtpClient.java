@@ -14,10 +14,10 @@ public class SmtpClient extends CustomThread{
 	public final String 	TYPE = "CLIENT";
 	public final String 	SERVICE = "SMTP";
 	public final String 	HOSTNAME = SERVICE + TYPE + ".local";
-	public final String  	USERNAME = "paco123";
+	public final String  	USERNAME = "paco";
 	//public final String 	DATABASE = "database.txt";
-	//public final String 	ENDPOINT = "127.0.0.1";
-	public final String 	ENDPOINT = "smtp.unverified.email";
+	public final String 	ENDPOINT = "127.0.0.1";
+	//public final String 	ENDPOINT = "smtp.unverified.email";
 	//public final String 	ENDPOINT = "ethereal.email";
 	//public final String 	ENDPOINT = "mailspons.com";
 	public final int 		RETRY_TIME = 2;
@@ -36,12 +36,12 @@ public class SmtpClient extends CustomThread{
 
         NetworkUtils.waitMessage(input);
         Utils.sleep(2000);
-        NetworkUtils.sendMessage("HELO " + USERNAME, output);
+        NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
 
         NetworkUtils.waitMessage(input);
         Utils.sleep(2000);
         //NetworkUtils.sendMessage("QUIT", output);
-        NetworkUtils.sendMessage("MAIL FROM: <user@"+HOSTNAME+">", output);
+        NetworkUtils.sendMessage("MAIL FROM: <"+USERNAME+"@"+HOSTNAME+">", output);
         
         NetworkUtils.waitMessage(input);
         //NetworkUtils.waitMessage(input);
