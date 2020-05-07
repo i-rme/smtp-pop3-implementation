@@ -33,23 +33,57 @@ public class Pop3Client extends CustomThread{
         output = NetworkUtils.getOutput(socket);
         
         NetworkUtils.waitMessage(this);
-        Utils.sleep(2000);
+        
+        Utils.sleep(1000);
         NetworkUtils.sendMessage("USER paco", output);
-       
         NetworkUtils.waitMessage(this);
-        Utils.sleep(2000);
+        
+        Utils.sleep(1000);
         NetworkUtils.sendMessage("PASS pack1", output);
+        NetworkUtils.waitMessage(this);
         
-        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("RETR 1", output);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
 
-       
-        NetworkUtils.waitMessage(this);
-        Utils.sleep(2000);
-        NetworkUtils.sendMessage("DELE 2", output);
         
-        NetworkUtils.waitMessage(this);
-        Utils.sleep(2000);
+        Utils.sleep(1000);
         NetworkUtils.sendMessage("LIST", output);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("DELE 2", output);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("LIST", output);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("RSET", output);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("LIST", output);
+        
+        
+        
+        
+        
         
         //NetworkUtils.waitMessage(this);
         //Utils.sleep(2000);

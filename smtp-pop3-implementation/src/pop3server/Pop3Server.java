@@ -73,28 +73,21 @@ public class Pop3Server extends CustomThread {
                     break;
         
                 case "DELE":
-                	mailId = Integer.parseInt(command[3]);		// [3] is the argument for the command
-                	server.delete(user, mailId);
-                    NetworkUtils.sendMessage("+OK", output);
+                	mailId = Integer.parseInt(command[3]);		// [3] is the argument
+                    NetworkUtils.sendMessage( server.delete(user, mailId) , output);
                     break;
                     
                 case "RSET":
-                	server.reset(user);
-                    NetworkUtils.sendMessage("+OK", output);
+                    NetworkUtils.sendMessage( server.reset(user) , output);
                     break;
                     
                 case "RETR":
-                	mailId = 0;		//TODO
-                	
-                	server.retrieve(user, mailId);
-                    NetworkUtils.sendMessage("+OK", output);
+                	mailId = Integer.parseInt(command[3]);		// [3] is the argument
+                    NetworkUtils.sendMessage( server.retrieve(user, mailId), output);
                     break;
         
                 case "LIST":
                 	NetworkUtils.sendMessage( server.list(user) , output);
-                    //NetworkUtils.sendMessage("+OK", output);
-                    //NetworkUtils.sendMessage("1 288", output);
-                    //NetworkUtils.sendMessage("2 144", output);
                     break;
                     
                 case "QUIT":

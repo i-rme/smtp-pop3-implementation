@@ -49,9 +49,8 @@ public class FormatUtils {
 		String sender = mailElements.get("From").toString(); 
 		String recipient = mailElements.get("To").toString(); 
 		String body = mailElements.get("Body").toString(); 
-		int id = 0;
 		
-		mail = new Mail(subject, sender, recipient, body, id);		
+		mail = new Mail(subject, sender, recipient, body);		
 		
 		return mail;
 	}

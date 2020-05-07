@@ -103,12 +103,22 @@ public class NetworkUtils {
 				break;
 			}
 	    	
-	    	Utils.sleep(100);
+	    	Utils.sleep(25);
 	    }
 	    while ( message.length() == 0 );
 		
         ConsoleUtils.logClient(message + "\r\n");
 	    return message;
+	}
+	
+	public static String waitMessages(CustomThread thread){
+		String output = "";
+		long end = System.currentTimeMillis() + 500;		//Wait 500ms for more messages
+		
+		while(System.currentTimeMillis() < end) {
+			output += NetworkUtils.waitMessage(thread) + "\r\n";
+		}
+		return output;
 	}
 	
 	public static String waitMessage(BufferedReader input){
@@ -122,7 +132,7 @@ public class NetworkUtils {
 				break;
 			}
 	    	
-	    	Utils.sleep(100);
+	    	Utils.sleep(25);
 	    }
 	    while ( message.length() == 0 );
 		
@@ -152,8 +162,8 @@ public class NetworkUtils {
         String[] array;
         
         if(message.charAt(0) == '@') { 	// if is error return it as is
-        	array = new String[1];
-        	array[0] = message;
+        	array = new String[3];
+        	array[2] = message;
         	return array; 
         }
         

@@ -5,14 +5,12 @@ public class Mail {
 	private String sender;
 	private String recipient;
 	private String body;
-	private int id;
 	
-	public Mail(String subject, String sender, String recipient, String body, int id) {
+	public Mail(String subject, String sender, String recipient, String body) {
 		this.subject = subject;
 		this.sender = sender;
 		this.recipient = recipient;
 		this.body = body;
-		this.id = id;
 	}
 
 
@@ -46,10 +44,6 @@ public class Mail {
 
 	public void setBody(String body) {
 		this.body = body;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
     @Override
