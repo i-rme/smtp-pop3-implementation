@@ -11,12 +11,22 @@ public class Mailbox {
 	
 	public String status() {
 		// TODO STAT from user's Mailbox
-		String output = "+OK " + mails.size() + " " + mails.get(0).getBody().length() + "\r\n";
+		String output = "+OK " + mails.size() + " " + sizeMailBox() + "\r\n";
 		return output;
-
-
 	}
 	
+	public int sizeMessage(int i) {		
+		return mails.get(i).getBody().length();
+	}
+	
+	public int sizeMailBox() {
+		int size = 0;
+		for (int i=0; i<mails.size(); i++)
+		{
+			size+=sizeMessage(i);
+		}
+		return size;
+	}
 	public void createDatabase(String username){
 		
 		Mail mail1 = new Mail("The exam", "Luisteacher@gmail.com", username+"@gmail.com","Hi the exam is the 23th of May, via test");
@@ -37,7 +47,7 @@ public class Mailbox {
 		String output = "+OK \r\n";
 
 		for(int i=0; i<mails.size(); i++){
-			output += i + " " + mails.get(i).getBody().length() + "\r\n"; 
+			output += i + " " + sizeMessage(i) + "\r\n"; 
 		}
 		
 		output = output.substring(0, output.length() - 2);	//Remove last line break
@@ -49,7 +59,7 @@ public class Mailbox {
 		String output;
 		
 		if(mails.size() > mailId) {	//If mail exists
-			output = "+OK "+ mails.get(mailId).getBody().length() +" octets \r\n";
+			output = "+OK "+ sizeMessage(mailId) +" octets \r\n";
 			output += mails.get(mailId).toString();
 		}else {
 			output = "-ERR no such mail "+mailId+" \r\n";
