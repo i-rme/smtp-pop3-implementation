@@ -1,4 +1,5 @@
 package data;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Mailbox {
@@ -15,8 +16,11 @@ public class Mailbox {
 		return output;
 	}
 	
-	public int sizeMessage(int i) {		
-		return mails.get(i).getBody().length();
+	public int sizeMessage(int i) {	
+		String s = mails.get(i).getBody();
+		byte[] b = s.getBytes(StandardCharsets.UTF_8);
+		System.out.println(b.length);
+		return b.length;
 	}
 	
 	public int sizeMailBox() {
