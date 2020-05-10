@@ -3,19 +3,18 @@ package data;
 import java.nio.charset.StandardCharsets;
 
 public class Mail {
-	
+
 	private String subject;
 	private String sender;
 	private String recipient;
 	private String body;
-	
+
 	public Mail(String subject, String sender, String recipient, String body) {
 		this.subject = subject;
 		this.sender = sender;
 		this.recipient = recipient;
 		this.body = body;
 	}
-
 
 	public String getSubject() {
 		return subject;
@@ -24,7 +23,7 @@ public class Mail {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	
+
 	public String getSender() {
 		return sender;
 	}
@@ -32,7 +31,7 @@ public class Mail {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
-	
+
 	public String getRecipient() {
 		return recipient;
 	}
@@ -40,7 +39,7 @@ public class Mail {
 	public void setRecipient(String recipient) {
 		this.recipient = recipient;
 	}
-	
+
 	public String getBody() {
 		return body;
 	}
@@ -48,20 +47,15 @@ public class Mail {
 	public void setBody(String body) {
 		this.body = body;
 	}
-	
-    @Override
-    public String toString() { 
-		String imf =
-				"Subject: "+subject+"\r\n"
-				+ "From: <"+sender+">\r\n"
-				+ "To: <"+recipient+">\r\n"
-				+ "\r\n"
-				+ ""+body+"\r\n"
-				+ ".\r\n";
-        return imf;
-    } 
 
-	public int getSize() {	
+	@Override
+	public String toString() {
+		String imf = "Subject: " + subject + "\r\n" + "From: <" + sender + ">\r\n" + "To: <" + recipient + ">\r\n"
+				+ "\r\n" + "" + body + "\r\n" + ".\r\n";
+		return imf;
+	}
+
+	public int getSize() {
 		String body = getBody();
 		byte[] body_utf8 = body.getBytes(StandardCharsets.UTF_8);
 		return body_utf8.length;

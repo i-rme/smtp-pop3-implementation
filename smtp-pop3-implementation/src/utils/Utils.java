@@ -1,7 +1,7 @@
 package utils;
 
 public class Utils {
-	
+
 	public static void sleep(int milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
@@ -9,6 +9,5 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-	
-}
 
+}

@@ -1,22 +1,22 @@
 package data;
+
 public class User {
 	private String id;
 	private String username;
 	private Mailbox mailbox;
 	private String password;
-	
+
 	public User(String id, String username, String password) {
 		this.id = id;
 		this.username = username;
 		this.mailbox = new Mailbox(username);
 		this.password = password;
 	}
-	
-	public boolean checkPassword(String password)
-	{
-		return (this.password==password);
+
+	public boolean checkPassword(String password) {
+		return (this.password == password);
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -49,5 +49,4 @@ public class User {
 		this.password = password;
 	}
 
-	
 }
