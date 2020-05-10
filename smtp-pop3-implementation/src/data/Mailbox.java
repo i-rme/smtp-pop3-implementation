@@ -12,7 +12,7 @@ public class Mailbox {
 	
 	public String status() {
 		// STAT from user's Mailbox
-		String output = "+OK " + mails.size() + " " + getSize() + "\r\n";
+		String output = "+OK " + mails.size() + " " + getSize();
 		return output;
 	}
 	
