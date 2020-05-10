@@ -11,23 +11,15 @@ public class Mailbox {
 	}
 	
 	public String status() {
-		// TODO STAT from user's Mailbox
-		String output = "+OK " + mails.size() + " " + sizeMailBox() + "\r\n";
+		// STAT from user's Mailbox
+		String output = "+OK " + mails.size() + " " + getSize() + "\r\n";
 		return output;
 	}
 	
-	public int sizeMessage(int i) {	
-		String s = mails.get(i).getBody();
-		byte[] b = s.getBytes(StandardCharsets.UTF_8);
-		System.out.println(b.length);
-		return b.length;
-	}
-	
-	public int sizeMailBox() {
+	public int getSize() {
 		int size = 0;
-		for (int i=0; i<mails.size(); i++)
-		{
-			size+=sizeMessage(i);
+		for (int i=0; i<mails.size(); i++){
+			size+=mails.get(i).getSize();
 		}
 		return size;
 	}
@@ -51,7 +43,7 @@ public class Mailbox {
 		String output = "+OK \r\n";
 
 		for(int i=0; i<mails.size(); i++){
-			output += i + " " + sizeMessage(i) + "\r\n"; 
+			output += i + " " + mails.get(i).getSize() + "\r\n"; 
 		}
 		
 		output = output.substring(0, output.length() - 2);	//Remove last line break
@@ -63,7 +55,7 @@ public class Mailbox {
 		String output;
 		
 		if(mails.size() > mailId) {	//If mail exists
-			output = "+OK "+ sizeMessage(mailId) +" octets \r\n";
+			output = "+OK "+ mails.get(mailId).getSize() +" octets \r\n";
 			output += mails.get(mailId).toString();
 		}else {
 			output = "-ERR no such mail "+mailId+" \r\n";

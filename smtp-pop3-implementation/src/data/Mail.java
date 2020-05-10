@@ -1,4 +1,7 @@
 package data;
+
+import java.nio.charset.StandardCharsets;
+
 public class Mail {
 	
 	private String subject;
@@ -58,5 +61,10 @@ public class Mail {
         return imf;
     } 
 
+	public int getSize() {	
+		String body = getBody();
+		byte[] body_utf8 = body.getBytes(StandardCharsets.UTF_8);
+		return body_utf8.length;
+	}
 
 }

@@ -43,6 +43,19 @@ public class Pop3Client extends CustomThread{
         NetworkUtils.waitMessage(this);
         
         Utils.sleep(1000);
+        NetworkUtils.sendMessage("STAT", output);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
+        NetworkUtils.sendMessage("LIST", output);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        NetworkUtils.waitMessage(this);
+        
+        Utils.sleep(1000);
         NetworkUtils.sendMessage("RETR 1", output);
         NetworkUtils.waitMessage(this);
         NetworkUtils.waitMessage(this);

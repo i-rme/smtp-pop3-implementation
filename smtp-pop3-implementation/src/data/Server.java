@@ -52,28 +52,28 @@ public class Server {
 	}
 
 	public String status(User user) {
-		// TODO STAT from user's Mailbox
+		// STAT from user's Mailbox
 		return user.getMailbox().status();
 		
 	}
 
 	public String delete(User user, int mailId) {
-		// TODO DELE mailId from user's Mailbox
+		// DELE mailId from user's Mailbox
 		return user.getMailbox().delete(mailId);
 	}
 
 	public String reset(User user) {
-		// TODO RSET Mailbox from user
+		// RSET Mailbox from user
 		return user.getMailbox().reset();
 	}
 
 	public String retrieve(User user, int mailId) {
-		// TODO RETR mailId content from user's Mailbox
+		// RETR mailId content from user's Mailbox
 		return user.getMailbox().retrieve(mailId);
 	}
 
 	public String list(User user) {
-		// TODO LIST all Mail from user's Mailbox
+		// LIST all Mail from user's Mailbox
 		return user.getMailbox().list();
 	}
 	
