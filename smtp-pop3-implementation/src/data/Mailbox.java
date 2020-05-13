@@ -2,7 +2,7 @@ package data;
 
 import java.util.ArrayList;
 
-public class Mailbox {
+public class Mailbox implements java.io.Serializable {
 
 	private ArrayList<Mail> mails = new ArrayList<Mail>();
 

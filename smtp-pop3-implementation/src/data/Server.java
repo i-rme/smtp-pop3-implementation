@@ -2,7 +2,7 @@ package data;
 
 import java.util.ArrayList;
 
-public class Server {
+public class Server implements java.io.Serializable{
 
 	public ArrayList<User> users = new ArrayList<User>();
 

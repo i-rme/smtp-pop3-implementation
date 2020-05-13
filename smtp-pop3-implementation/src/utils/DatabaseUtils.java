@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import data.Server;
+
 public class DatabaseUtils {
 
 	public static void Serialize(Object obj, String filepath) {
@@ -20,9 +22,11 @@ public class DatabaseUtils {
 
 			o.close();
 			f.close();
+			
+			System.out.println("INFO: Saving current state to the database");
 
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.println("INFO: Error raving state to database");
 		} catch (IOException e) {
 			System.out.println("Error initializing stream");
 		}
@@ -38,11 +42,14 @@ public class DatabaseUtils {
 
 			oi.close();
 			fi.close();
+			
+			System.out.println("INFO: Database was loaded from file");
 
 			return obj;
 
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.println("INFO: A new database was created");
+			return new Server();
 		} catch (IOException e) {
 			System.out.println("Error initializing stream");
 		} catch (ClassNotFoundException e) {

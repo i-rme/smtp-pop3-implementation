@@ -2,7 +2,7 @@ package data;
 
 import java.nio.charset.StandardCharsets;
 
-public class Mail {
+public class Mail implements java.io.Serializable {
 
 	private String subject;
 	private String sender;

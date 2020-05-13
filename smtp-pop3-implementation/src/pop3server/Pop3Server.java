@@ -8,6 +8,7 @@ import java.net.Socket;
 import data.Server;
 import data.User;
 import utils.CustomThread;
+import utils.DatabaseUtils;
 import utils.NetworkUtils;
 
 public class Pop3Server extends CustomThread {
@@ -16,7 +17,7 @@ public class Pop3Server extends CustomThread {
 	public final String TYPE = "SERVER";
 	public final String SERVICE = "POP3";
 	public final String HOSTNAME = SERVICE + TYPE + ".local";
-	private final String DATABASE = HOSTNAME + "_database.txt";
+	private final String DATABASE = HOSTNAME + "_database.db";
 	private final String ENDPOINT = "127.0.0.1";
 	private final int RETRY_TIME = 2;
 	public volatile boolean RUNNING = true;
@@ -31,6 +32,12 @@ public class Pop3Server extends CustomThread {
 	public void run() {
 
 		System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
+		
+		
+		
+		server = (Server) DatabaseUtils.Deserialize(DATABASE);
+		DatabaseUtils.Serialize(server, DATABASE);
+		
 
 		while (RUNNING) {
 
@@ -43,7 +50,6 @@ public class Pop3Server extends CustomThread {
 
 			NetworkUtils.sendMessage("+OK Service Ready", output);
 
-			server = new Server();
 
 			do {
 				String username = NetworkUtils.waitMessageRegex("(USER) ([a-zA-Z0-9]+)", input);
@@ -100,6 +106,8 @@ public class Pop3Server extends CustomThread {
 					NetworkUtils.sendMessage("-ERR Unknown command.", output);
 
 				}
+				
+				DatabaseUtils.Serialize(server, DATABASE);
 			} while (user != null);
 
 			// while(true) NetworkUtils.waitMessage(input);
