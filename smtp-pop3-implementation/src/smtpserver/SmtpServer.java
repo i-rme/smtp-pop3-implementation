@@ -7,7 +7,9 @@ import java.net.Socket;
 import java.util.Map;
 
 import data.Mail;
+import data.Server;
 import utils.CustomThread;
+import utils.DatabaseUtils;
 import utils.FormatUtils;
 import utils.NetworkUtils;
 
@@ -17,15 +19,17 @@ public class SmtpServer extends CustomThread {
 	public final String TYPE = "SERVER";
 	public final String SERVICE = "SMTP";
 	public final String HOSTNAME = SERVICE + TYPE + ".local";
-	public final String DATABASE = HOSTNAME + "_database.txt";
+	public final String DATABASE = HOSTNAME + "_database.db";
 	public final String ENDPOINT = "127.0.0.1";
 	public final int RETRY_TIME = 2;
 	public volatile boolean RUNNING = true;
+	public boolean DEMO = false;
 
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private BufferedReader input;
 	private PrintWriter output;
+	private Server server;
 
 	public static String endpoint_hostname, mail_from, rcpt_to, data;
 	public static Mail mail;
@@ -34,6 +38,9 @@ public class SmtpServer extends CustomThread {
 	public void run() {
 
 		System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
+		
+		server = (Server) DatabaseUtils.Deserialize(DATABASE, DEMO);
+		DatabaseUtils.Serialize(server, DATABASE);
 
 		while (RUNNING) {
 
@@ -97,6 +104,7 @@ public class SmtpServer extends CustomThread {
 					NetworkUtils.sendMessage("500 Unknown command.", output);
 
 				}
+				DatabaseUtils.Serialize(server, DATABASE);
 			} while (mail == null || end == false);
 
 			NetworkUtils.closeServerSocket(serverSocket);
