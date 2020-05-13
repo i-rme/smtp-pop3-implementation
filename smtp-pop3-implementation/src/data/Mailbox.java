@@ -6,8 +6,8 @@ public class Mailbox {
 
 	private ArrayList<Mail> mails = new ArrayList<Mail>();
 
-	public Mailbox(String username) {
-		createDatabase(username);
+	public Mailbox(String username, int userMailbox) {
+		createDatabase(username, userMailbox);
 	}
 
 	public String status() {
@@ -24,25 +24,44 @@ public class Mailbox {
 		return size;
 	}
 
-	public void createDatabase(String username) {
+	public void createDatabase(String username, int userMailbox) {
 
-		Mail mail1 = new Mail("The exam", "Luisteacher@gmail.com", username + "@gmail.com",
-				"Hi the exam is the 23th of May, via test");
-		Mail mail2 = new Mail("The groupwork", "AndresCoworker@gmail.com", username + "@gmail.com",
-				"How about do a meeting this weekend? I only can these days");
-		Mail mail3 = new Mail("Electric bill", "ENDESA@gmail.com", username + "@gmail.com",
-				"You have to pay 5000$ if u want to keep ur internet on");
-		Mail mail4 = new Mail("About Covid-19", "USJ@gmail.com", username + "@gmail.com",
-				"Get the kids out of the house, we no longer have covid19, now covid20");
-		Mail mail5 = new Mail("New hamburguers!", "BurguerQueen@gmail.com", username + "@gmail.com",
-				"New burger with papaya flavor");
+		if(userMailbox==1){
+			Mail mail1 = new Mail("The exam", "Luisteacher@gmail.com", username + "@gmail.com",
+					"Hi the exam is the 23th of May, via test");
+			Mail mail2 = new Mail("The groupwork", "AndresCoworker@gmail.com", username + "@gmail.com",
+					"How about do a meeting this weekend? I only can these days");
+			Mail mail3 = new Mail("Electric bill", "ENDESA@gmail.com", username + "@gmail.com",
+					"You have to pay 5000$ if u want to keep ur internet on");
+			Mail mail4 = new Mail("About Covid-19", "USJ@gmail.com", username + "@gmail.com",
+					"Get the kids out of the house, we no longer have covid19, now covid20");
+			Mail mail5 = new Mail("New hamburguers!", "BurguerQueen@gmail.com", username + "@gmail.com",
+					"New burger with papaya flavor");
 
-		mails.add(mail1);
-		mails.add(mail2);
-		mails.add(mail3);
-		mails.add(mail4);
-		mails.add(mail5);
+			mails.add(mail1);
+			mails.add(mail2);
+			mails.add(mail3);
+			mails.add(mail4);
+			mails.add(mail5);
+		}else {
+			Mail mail1 = new Mail("Come and get a cut!", "peluqueros@gmail.com", username + "@gmail.com",
+					"Hi the hairdressing service is open already! Come!");
+			Mail mail2 = new Mail("YOU WIN A 1.000.000$ CAR", "spam@gmail.com", username + "@gmail.com",
+					"We only need your credit card credentials!");
+			Mail mail3 = new Mail("New game", "steam@gmail.com", username + "@gmail.com",
+					"You can now play for free the new FIFA game because the quarentine!");
+			Mail mail4 = new Mail("Send your dish", "cookingcourse@gmail.com", username + "@gmail.com",
+					"Send your dish to evaluate it as soon as posible, please!");
+			Mail mail5 = new Mail("Mark of Network & Communications II", "profe@gmail.com", username + "@gmail.com",
+					"Nice job, guys, you get a [_]");
 
+			mails.add(mail1);
+			mails.add(mail2);
+			mails.add(mail3);
+			mails.add(mail4);
+			mails.add(mail5);
+		}
+		
 	}
 
 	public String list() {

@@ -6,10 +6,10 @@ public class User {
 	private Mailbox mailbox;
 	private String password;
 
-	public User(String id, String username, String password) {
+	public User(String id, String username, String password, int mailboxUser) {
 		this.id = id;
 		this.username = username;
-		this.mailbox = new Mailbox(username);
+		this.mailbox = new Mailbox(username, mailboxUser);
 		this.password = password;
 	}
 

@@ -12,17 +12,17 @@ public class Server {
 
 	public void createDatabase() {
 
-		User user1 = new User("1", "paco", "pack1");
-		User user2 = new User("2", "rocio", "rocy21");
-		User user3 = new User("3", "maria", "11mary2223");
-		User user4 = new User("4", "victor", "vickingtor");
-		User user5 = new User("5", "xavi", "xaviondo77");
+		User user1 = new User("1", "paco", "pack1",1);
+		User user2 = new User("2", "rocio", "rocy21",2);
+		//User user3 = new User("3", "maria", "11mary2223",1);
+		//User user4 = new User("4", "victor", "vickingtor",1);
+		//User user5 = new User("5", "xavi", "xaviondo77",1);
 
 		users.add(user1);
 		users.add(user2);
-		users.add(user3);
-		users.add(user4);
-		users.add(user5);
+		//users.add(user3);
+		//users.add(user4);
+		//users.add(user5);
 
 	}
 
