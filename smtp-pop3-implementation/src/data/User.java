@@ -6,10 +6,10 @@ public class User implements java.io.Serializable {
 	private Mailbox mailbox;
 	private String password;
 
-	public User(String id, String username, String password, int mailboxUser) {
+	public User(String id, String username, String password) {
 		this.id = id;
 		this.username = username;
-		this.mailbox = new Mailbox(username, mailboxUser);
+		this.mailbox = new Mailbox();
 		this.password = password;
 	}
 

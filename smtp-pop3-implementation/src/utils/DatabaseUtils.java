@@ -32,7 +32,7 @@ public class DatabaseUtils {
 		}
 	}
 
-	public static Object Deserialize(String filepath) {
+	public static Object Deserialize(String filepath, boolean DEMO) {
 		try {
 
 			FileInputStream fi = new FileInputStream(new File(filepath));
@@ -49,7 +49,7 @@ public class DatabaseUtils {
 
 		} catch (FileNotFoundException e) {
 			System.out.println("INFO: A new database was created");
-			return new Server();
+			return new Server(DEMO);
 		} catch (IOException e) {
 			System.out.println("Error initializing stream");
 		} catch (ClassNotFoundException e) {

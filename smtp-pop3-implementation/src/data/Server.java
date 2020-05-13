@@ -7,22 +7,61 @@ public class Server implements java.io.Serializable{
 	public ArrayList<User> users = new ArrayList<User>();
 
 	public Server() {
-		createDatabase();
+		
+	}
+	
+	public Server(boolean createDemoDatabase) {
+		
+		if(createDemoDatabase) {
+			System.out.println("INFO: Creating demo users");
+			createDemoDatabase();
+		}
+		
 	}
 
-	public void createDatabase() {
+	public void createDemoDatabase() {
 
-		User user1 = new User("1", "paco", "pack1",1);
-		User user2 = new User("2", "rocio", "rocy21",2);
-		//User user3 = new User("3", "maria", "11mary2223",1);
-		//User user4 = new User("4", "victor", "vickingtor",1);
-		//User user5 = new User("5", "xavi", "xaviondo77",1);
+		User user1 = new User("1", "paco", "pack1");
+		User user2 = new User("2", "rocio", "rocy21");
 
+		Mail mail1 = new Mail("The exam", "Luisteacher@gmail.com", user1.getUsername() + "@gmail.com",
+				"Hi the exam is the 23th of May, via test");
+		Mail mail2 = new Mail("The groupwork", "AndresCoworker@gmail.com", user1.getUsername() + "@gmail.com",
+				"How about do a meeting this weekend? I only can these days");
+		Mail mail3 = new Mail("Electric bill", "ENDESA@gmail.com", user1.getUsername() + "@gmail.com",
+				"You have to pay 5000$ if u want to keep ur internet on");
+		Mail mail4 = new Mail("About Covid-19", "USJ@gmail.com", user1.getUsername() + "@gmail.com",
+				"Get the kids out of the house, we no longer have covid19, now covid20");
+		Mail mail5 = new Mail("New hamburguers!", "BurguerQueen@gmail.com", user1.getUsername() + "@gmail.com",
+				"New burger with papaya flavor");
+		
+		Mail mail6 = new Mail("Come and get a cut!", "peluqueros@gmail.com", user2.getUsername() + "@gmail.com",
+				"Hi the hairdressing service is open already! Come!");
+		Mail mail7 = new Mail("YOU WIN A 1.000.000$ CAR", "spam@gmail.com", user2.getUsername() + "@gmail.com",
+				"We only need your credit card credentials!");
+		Mail mail8 = new Mail("New game", "steam@gmail.com", user2.getUsername() + "@gmail.com",
+				"You can now play for free the new FIFA game because the quarentine!");
+		Mail mail9 = new Mail("Send your dish", "cookingcourse@gmail.com", user2.getUsername() + "@gmail.com",
+				"Send your dish to evaluate it as soon as posible, please!");
+		Mail mail10 = new Mail("Mark of Network & Communications II", "profe@gmail.com", user2.getUsername() + "@gmail.com",
+				"Nice job, guys, you get a [_]");
+		
+		user1.getMailbox().mails.add(mail1);
+		user1.getMailbox().mails.add(mail2);
+		user1.getMailbox().mails.add(mail3);
+		user1.getMailbox().mails.add(mail4);
+		user1.getMailbox().mails.add(mail5);
+		
+		user2.getMailbox().mails.add(mail6);
+		user2.getMailbox().mails.add(mail7);
+		user2.getMailbox().mails.add(mail8);
+		user2.getMailbox().mails.add(mail9);
+		user2.getMailbox().mails.add(mail10);
+		
 		users.add(user1);
 		users.add(user2);
-		//users.add(user3);
-		//users.add(user4);
-		//users.add(user5);
+		
+
 
 	}
 

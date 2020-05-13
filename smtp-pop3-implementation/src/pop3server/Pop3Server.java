@@ -21,7 +21,8 @@ public class Pop3Server extends CustomThread {
 	private final String ENDPOINT = "127.0.0.1";
 	private final int RETRY_TIME = 2;
 	public volatile boolean RUNNING = true;
-
+	public boolean DEMO = false;
+	
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private BufferedReader input;
@@ -34,8 +35,7 @@ public class Pop3Server extends CustomThread {
 		System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
 		
 		
-		
-		server = (Server) DatabaseUtils.Deserialize(DATABASE);
+		server = (Server) DatabaseUtils.Deserialize(DATABASE, DEMO);
 		DatabaseUtils.Serialize(server, DATABASE);
 		
 
@@ -118,6 +118,18 @@ public class Pop3Server extends CustomThread {
 		} // while
 
 	} // run
+	
+	public Pop3Server() {
+		
+	}
+	
+	public Pop3Server(boolean createDemoDatabase) {
+		
+		if(createDemoDatabase) {
+			DEMO = true;
+		}
+		
+	}
 
 	public void CheckUser() {
 
