@@ -126,10 +126,15 @@ public class SmtpServer extends CustomThread {
 
 	private void deliver(Mail mail) {
 		String[] recipient = mail.getRecipient().split("@");
+		String[] sender = mail.getSender().split("@");
+		
 		if (HOSTNAME.equals(recipient[1])) { // Belongs to our server
 			// Meterlo en la bandeja de quien sea
 		} else {
-			relay(ENDPOINT, 25, 2, HOSTNAME, mail.getSender(), mail.getRecipient(), mail);
+			if(HOSTNAME.equals(sender[1]))
+				relay(ENDPOINT, 25, 2, HOSTNAME, mail.getSender(), mail.getRecipient(), mail);
+			else
+				NetworkUtils.sendMessage("550 Recipient address rejected: User unknown in virtual mailbox table.", output);
 		}
 	}
 
