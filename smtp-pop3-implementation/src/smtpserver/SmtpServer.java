@@ -141,8 +141,6 @@ public class SmtpServer extends CustomThread {
 
 			String username = recipient[0];
 			
-
-			System.out.print("Antes de check user");
 			
 			if(server.checkUser(username)) {
 				

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import data.Mail;
+import smtpgui.Main;
 import utils.CustomThread;
 import utils.NetworkUtils;
 import utils.Utils;
@@ -25,7 +27,12 @@ public class SmtpClient extends CustomThread {
 	public Socket socket;
 	public BufferedReader input;
 	public PrintWriter output;
-
+	
+	
+	public boolean GUI_HAS_CONNECTED = false;
+	public int GUI_EMAIL_SENT_RESPONSE = 0;
+	public Mail GUI_MAIL = null;
+	
 	public void run() {
 
 		System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
@@ -90,6 +97,47 @@ public class SmtpClient extends CustomThread {
 				NetworkUtils.waitMessage(input);
 				Utils.sleep(2000);
 				NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
+				
+				GUI_HAS_CONNECTED = true;
+				
+				
+				while(true) {
+				
+				while(GUI_MAIL == null) {
+					Utils.sleep(500);
+				}
+				
+				NetworkUtils.waitMessage(input);
+				NetworkUtils.sendMessage("MAIL FROM: <" + USERNAME + "@SMTPSERVER.local>", output);
+				
+				NetworkUtils.waitMessage(input);
+
+				NetworkUtils.sendMessage("RCPT TO: <rocio@SMTPSERVER.local>", output);
+
+				NetworkUtils.waitMessage(input);
+
+				NetworkUtils.sendMessage("DATA", output);
+
+				NetworkUtils.waitMessage(input);
+
+				NetworkUtils.sendMessage("Subject: Example Message", output);
+				NetworkUtils.sendMessage("From: <paco@SMTPSERVER.local>", output);
+				NetworkUtils.sendMessage("To: <rocio@SMTPSERVER.local>", output);
+				NetworkUtils.sendMessage("", output);
+				NetworkUtils.sendMessage("This is the body", output);
+				NetworkUtils.sendMessage(".", output);
+
+				NetworkUtils.waitMessage(input);
+
+				NetworkUtils.sendMessage("QUIT", output);
+
+				NetworkUtils.waitMessage(input); // Bye
+
+				GUI_MAIL = null;
+				
+				}
+				
+				
 		    }  
 		};
 

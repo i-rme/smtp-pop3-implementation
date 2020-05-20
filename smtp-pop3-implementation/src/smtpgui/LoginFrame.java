@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import smtpclient.SmtpClient;
+import utils.Utils;
 
 public class LoginFrame extends JFrame {
 
@@ -84,12 +85,19 @@ public class LoginFrame extends JFrame {
 					boolean gui = true;
 					Main.smtpClient = new SmtpClient();
 					Main.smtpClient.start(gui);
-
+					
+					
+					while(Main.smtpClient.GUI_HAS_CONNECTED == false) {
+						Utils.sleep(500);
+					}
+					
 					SendEmail newFrame = new SendEmail();
-
 					newFrame.setVisible(true);
 					dispose();
 					JOptionPane.showMessageDialog(null, "Connection was successful.");
+					
+					
+					
 				}
 
 			}

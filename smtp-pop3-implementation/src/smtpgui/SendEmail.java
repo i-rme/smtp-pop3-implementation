@@ -12,6 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import data.Mail;
+import utils.Utils;
+
 public class SendEmail extends JFrame {
 
 	JButton btnSend = new JButton("Send");
@@ -77,6 +80,7 @@ public class SendEmail extends JFrame {
 				String from = txFrom.getText();
 				String to = txTo.getText();
 				String subject = txSubject.getText();
+				String body = Body.getText();
 				// if all fields are not complete
 				if (from.equals("") | to.equals("") | subject.equals("")) {
 
@@ -86,8 +90,13 @@ public class SendEmail extends JFrame {
 				// Send Message
 				else {
 					// Create Mail to send
-					// Mail(subject, from, to, Body)
-
+					
+					Main.smtpClient.GUI_MAIL = new Mail(subject, from, to, body);
+					
+					while(Main.smtpClient.GUI_HAS_CONNECTED == false) {
+						Utils.sleep(500);
+					}
+					
 					JOptionPane.showMessageDialog(null, "Message sent");
 					txFrom.setText("");
 					txTo.setText("");

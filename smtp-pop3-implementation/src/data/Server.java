@@ -67,9 +67,7 @@ public class Server implements java.io.Serializable{
 
 	public boolean checkUser(String username) {
 		
-		System.out.println("users.size() " + users.size());
 		for (int i = 0; i < users.size(); i++) {
-			System.out.println("i " + i);
 			if(users.get(i) != null) {
 				if (username.equals(users.get(i).getUsername())) {
 					return true;
@@ -85,10 +83,9 @@ public class Server implements java.io.Serializable{
 	public User getUser(String username) {
 		for (int i = 0; i < users.size(); i++) {
 			if (username.equals(users.get(i).getUsername())) {
-				System.out.println("SE QUIEN ES");
 				return users.get(i);
 			}else {
-				System.out.println("NO SE QUIEN ES");
+
 			}
 		}
 		return null;
