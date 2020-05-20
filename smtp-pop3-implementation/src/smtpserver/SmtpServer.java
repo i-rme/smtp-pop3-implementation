@@ -8,6 +8,7 @@ import java.util.Map;
 
 import data.Mail;
 import data.Server;
+import data.User;
 import utils.CustomThread;
 import utils.DatabaseUtils;
 import utils.FormatUtils;
@@ -23,7 +24,7 @@ public class SmtpServer extends CustomThread {
 	public final String ENDPOINT = "127.0.0.1";
 	public final int RETRY_TIME = 2;
 	public volatile boolean RUNNING = true;
-	public boolean DEMO = false;
+	public boolean DEMO = true;
 
 	private ServerSocket serverSocket;
 	private Socket socket;
@@ -93,7 +94,7 @@ public class SmtpServer extends CustomThread {
 
 				case "QUIT":
 					NetworkUtils.sendMessage("221 " + HOSTNAME + " Service closing transmission channel", output);
-					end = true;
+					//end = true;
 					break;
 
 				case "@error_endpoint_disconnected":
@@ -137,7 +138,25 @@ public class SmtpServer extends CustomThread {
 		String[] sender = mail.getSender().split("@");
 		
 		if (HOSTNAME.equals(recipient[1])) { // Belongs to our server
-			// Meterlo en la bandeja de quien sea
+
+			String username = recipient[0];
+			
+
+			System.out.print("Antes de check user");
+			
+			if(server.checkUser(username)) {
+				
+				if(server.getUser(username) != null) {
+					User user = server.getUser(username);
+					server.add(user, mail);
+				}else {
+					NetworkUtils.sendMessage("550 "+username+": Recipient address rejected: User unknown in virtual mailbox table.", output);
+				}
+
+			}else {
+				NetworkUtils.sendMessage("550 "+username+": Recipient address rejected: User unknown in virtual mailbox table.", output);
+			}
+
 		} else {
 			if(HOSTNAME.equals(sender[1]))
 				relay(ENDPOINT, 25, 2, HOSTNAME, mail.getSender(), mail.getRecipient(), mail);

@@ -66,12 +66,32 @@ public class Server implements java.io.Serializable{
 	}
 
 	public boolean checkUser(String username) {
+		
+		System.out.println("users.size() " + users.size());
 		for (int i = 0; i < users.size(); i++) {
-			if (username.equals(users.get(i).getUsername())) {
-				return true;
+			System.out.println("i " + i);
+			if(users.get(i) != null) {
+				if (username.equals(users.get(i).getUsername())) {
+					return true;
+				}
+			}else {
+				return false;
 			}
 		}
 		return false;
+	}
+	
+
+	public User getUser(String username) {
+		for (int i = 0; i < users.size(); i++) {
+			if (username.equals(users.get(i).getUsername())) {
+				System.out.println("SE QUIEN ES");
+				return users.get(i);
+			}else {
+				System.out.println("NO SE QUIEN ES");
+			}
+		}
+		return null;
 	}
 
 	public User getUser(String username, String password) {
@@ -98,6 +118,12 @@ public class Server implements java.io.Serializable{
 	public String delete(User user, int mailId) {
 		// DELE mailId from user's Mailbox
 		return user.getMailbox().delete(mailId);
+	}
+	
+	public String add(User user, Mail mail) {
+		// ADD mail (smtp)
+		user.getMailbox().mails.add(mail);
+		return "250 Requested mail action okay, completed \r\n";
 	}
 
 	public String reset(User user) {

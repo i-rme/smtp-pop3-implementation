@@ -41,13 +41,13 @@ public class SmtpClient extends CustomThread {
 		NetworkUtils.waitMessage(input);
 		Utils.sleep(2000);
 		// NetworkUtils.sendMessage("QUIT", output);
-		NetworkUtils.sendMessage("MAIL FROM: <" + USERNAME + "@" + HOSTNAME + ">", output);
+		NetworkUtils.sendMessage("MAIL FROM: <" + USERNAME + "@SMTPSERVER.local>", output);
 
 		NetworkUtils.waitMessage(input);
 		// NetworkUtils.waitMessage(input);
 
 		Utils.sleep(2000);
-		NetworkUtils.sendMessage("RCPT TO: <user2@" + ENDPOINT + ">", output);
+		NetworkUtils.sendMessage("RCPT TO: <rocio@SMTPSERVER.local>", output);
 
 		NetworkUtils.waitMessage(input);
 		Utils.sleep(2000);
@@ -56,8 +56,8 @@ public class SmtpClient extends CustomThread {
 		NetworkUtils.waitMessage(input);
 		Utils.sleep(2000);
 		NetworkUtils.sendMessage("Subject: Example Message", output);
-		NetworkUtils.sendMessage("From: <user@SMTPCLIENT.local>", output);
-		NetworkUtils.sendMessage("To: <user2@SMTPCLIENT.local>", output);
+		NetworkUtils.sendMessage("From: <paco@SMTPSERVER.local>", output);
+		NetworkUtils.sendMessage("To: <rocio@SMTPSERVER.local>", output);
 		NetworkUtils.sendMessage("", output);
 		NetworkUtils.sendMessage("This is the body", output);
 		NetworkUtils.sendMessage(".", output);
