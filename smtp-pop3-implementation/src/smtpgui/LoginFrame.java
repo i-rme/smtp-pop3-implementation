@@ -80,8 +80,10 @@ public class LoginFrame extends JFrame {
 				if (hostName.equals("") || serverName.equals("") || port.equals("")) { // error
 					JOptionPane.showMessageDialog(null, "Please complete all the fields.");
 				} else {
+					
+					boolean gui = true;
 					Main.smtpClient = new SmtpClient();
-					Main.smtpClient.run();
+					Main.smtpClient.start(gui);
 
 					SendEmail newFrame = new SendEmail();
 

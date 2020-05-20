@@ -76,5 +76,26 @@ public class SmtpClient extends CustomThread {
 		// socket.close();
 
 	}
+	
+	public void start(boolean gui) {
+		
+		Thread one = new Thread() {
+		    public void run() {
+		        System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
+
+				socket = NetworkUtils.getSocket(ENDPOINT, PORT, RETRY_TIME);
+				input = NetworkUtils.getInput(socket);
+				output = NetworkUtils.getOutput(socket);
+
+				NetworkUtils.waitMessage(input);
+				Utils.sleep(2000);
+				NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
+		    }  
+		};
+
+		one.start();
+
+		
+	}
 
 }
