@@ -146,7 +146,7 @@ public class SmtpServer extends CustomThread {
 				
 				if(server.getUser(username) != null) {
 					User user = server.getUser(username);
-					server.add(user, mail);
+					NetworkUtils.sendMessage( server.add(user, mail), output );
 				}else {
 					NetworkUtils.sendMessage("550 "+username+": Recipient address rejected: User unknown in virtual mailbox table.", output);
 				}
