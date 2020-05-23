@@ -15,11 +15,10 @@ import javax.swing.JTextField;
 import data.Mail;
 import utils.Utils;
 
-public class SendEmail extends JFrame {
+public class SecondaryForm extends JFrame {
 
 	JButton btnSend = new JButton("Send");
 	JPanel panel = new JPanel();
-	// JLabel lbIntroduction = new JLabel("Email Creation");
 
 	JLabel lbFrom = new JLabel("From:");
 	JLabel lbTo = new JLabel("To:");
@@ -31,7 +30,7 @@ public class SendEmail extends JFrame {
 
 	JTextArea Body = new JTextArea(40, 40);
 
-	SendEmail() {
+	SecondaryForm() {
 		super("Send-Email");
 		setSize(700, 500);
 		setLocation(500, 280);
@@ -51,10 +50,13 @@ public class SendEmail extends JFrame {
 		// Third part
 		lbSubject.setBounds(170, 130, 50, 20);
 		txSubject.setBounds(230, 130, 430, 20);
+		
+		txFrom.setText("rocio@SMTPSERVER.local");
+		txTo.setText("paco@SMTPSERVER.local");
+		txSubject.setText("Subject");
 
 		Body.setBounds(10, 170, 660, 280);
-
-		Body.setText("Write here the message");
+		Body.setText("Write the body here.");
 
 		panel.add(lbFrom);
 		panel.add(lbTo);
@@ -81,26 +83,29 @@ public class SendEmail extends JFrame {
 				String to = txTo.getText();
 				String subject = txSubject.getText();
 				String body = Body.getText();
+				
 				// if all fields are not complete
 				if (from.equals("") | to.equals("") | subject.equals("")) {
-
-					// dispose();
+					
 					JOptionPane.showMessageDialog(null, "Please complete the fields");
-				}
-				// Send Message
-				else {
-					// Create Mail to send
 					
-					Main.smtpClient.GUI_MAIL = new Mail(subject, from, to, body);
+				}else{
 					
-					while(Main.smtpClient.GUI_HAS_CONNECTED == false) {
-						Utils.sleep(500);
+					// Create Mail
+					Main.smtpClient.GUI_MAIL_FROM 	= from;
+					Main.smtpClient.GUI_MAIL_TO 	= to;
+					Main.smtpClient.GUI_MAIL		= new Mail(subject, from, to, body);
+
+					while (Main.smtpClient.GUI_HAS_SENT == false) {
+						//System.out.println("Waiting GUI_HAS_SENT");
+						Utils.sleep(250);
 					}
-					
-					JOptionPane.showMessageDialog(null, "Message sent");
-					txFrom.setText("");
-					txTo.setText("");
-					txSubject.setText("");
+
+					JOptionPane.showMessageDialog(null, "Message sent sucessfully.");
+					txFrom.setText("rocio@SMTPSERVER.local");
+					txTo.setText("paco@SMTPSERVER.local");
+					txSubject.setText("Subject");
+					Body.setText("Write the body here.");
 
 				}
 

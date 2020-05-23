@@ -36,6 +36,7 @@ public class Pop3Server extends CustomThread {
 		
 		
 		server = (Server) DatabaseUtils.Deserialize(DATABASE, DEMO);
+		System.out.println("INFO: " + server.getStatus());
 		DatabaseUtils.Serialize(server, DATABASE);
 		
 
@@ -108,6 +109,7 @@ public class Pop3Server extends CustomThread {
 				}
 				
 				DatabaseUtils.Serialize(server, DATABASE);
+				System.out.println("INFO: " + server.getStatus());
 			} while (user != null);
 
 			// while(true) NetworkUtils.waitMessage(input);

@@ -64,6 +64,18 @@ public class Server implements java.io.Serializable{
 
 
 	}
+	
+	public String getStatus() {
+		
+		int emailNum = 0;
+		for (int i = 0; i < users.size(); i++) {
+			if(users.get(i) != null) {
+				emailNum += users.get(i).getMailbox().mails.size();
+			}
+		}
+		
+		return users.size()+" users and " + emailNum + " mails on the database.";
+	}
 
 	public boolean checkUser(String username) {
 		

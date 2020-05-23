@@ -17,7 +17,6 @@ public class SmtpClient extends CustomThread {
 	public final String SERVICE = "SMTP";
 	public final String HOSTNAME = SERVICE + TYPE + ".local";
 	public final String USERNAME = "paco";
-	// public final String DATABASE = "database.txt";
 	public final String ENDPOINT = "127.0.0.1";
 	// public final String ENDPOINT = "smtp.unverified.email";
 	// public final String ENDPOINT = "ethereal.email";
@@ -28,9 +27,13 @@ public class SmtpClient extends CustomThread {
 	public BufferedReader input;
 	public PrintWriter output;
 	
-	
+	// Used for the GUI
 	public boolean GUI_HAS_CONNECTED = false;
 	public int GUI_EMAIL_SENT_RESPONSE = 0;
+
+	public boolean GUI_HAS_SENT = false;
+	public String GUI_MAIL_FROM;
+	public String GUI_MAIL_TO;
 	public Mail GUI_MAIL = null;
 	
 	public void run() {
@@ -84,58 +87,60 @@ public class SmtpClient extends CustomThread {
 
 	}
 	
-	public void start(boolean gui) {
+	public void start(String hostname, String endpoint, int port) {
 		
 		Thread one = new Thread() {
 		    public void run() {
 		        System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
 
-				socket = NetworkUtils.getSocket(ENDPOINT, PORT, RETRY_TIME);
+				socket = NetworkUtils.getSocket(endpoint, port, RETRY_TIME);
 				input = NetworkUtils.getInput(socket);
 				output = NetworkUtils.getOutput(socket);
 
 				NetworkUtils.waitMessage(input);
-				Utils.sleep(2000);
-				NetworkUtils.sendMessage("HELO " + HOSTNAME, output);
+				Utils.sleep(100);
+				NetworkUtils.sendMessage("HELO " + hostname, output);
+				
+				Utils.sleep(100);
+				NetworkUtils.waitMessage(input);
 				
 				GUI_HAS_CONNECTED = true;
+					
+				while(GUI_HAS_CONNECTED) {
 				
+					while(GUI_MAIL == null) {
+						Utils.sleep(250);
+						//System.out.println("Waiting GUI_MAIL");
+					}
+					GUI_HAS_SENT = false;
+					
+
+					NetworkUtils.sendMessage("MAIL FROM: <" + GUI_MAIL_FROM + ">", output);
+					
+					Utils.sleep(100);
+					NetworkUtils.waitMessage(input);
+					NetworkUtils.sendMessage("RCPT TO: <" + GUI_MAIL_TO + ">", output);
+	
+					Utils.sleep(100);
+					NetworkUtils.waitMessage(input);
+					NetworkUtils.sendMessage("DATA", output);
+	
+					Utils.sleep(100);
+					NetworkUtils.waitMessage(input);
+					NetworkUtils.sendMessage(GUI_MAIL.toString(), output);
+	
+					Utils.sleep(100);
+					NetworkUtils.waitMessage(input);
+	
+					GUI_HAS_SENT = true;
+					GUI_MAIL_FROM = "";
+					GUI_MAIL_TO = "";
+					GUI_MAIL = null;
 				
-				while(true) {
-				
-				while(GUI_MAIL == null) {
-					Utils.sleep(500);
 				}
 				
-				NetworkUtils.waitMessage(input);
-				NetworkUtils.sendMessage("MAIL FROM: <" + USERNAME + "@SMTPSERVER.local>", output);
-				
-				NetworkUtils.waitMessage(input);
-
-				NetworkUtils.sendMessage("RCPT TO: <rocio@SMTPSERVER.local>", output);
-
-				NetworkUtils.waitMessage(input);
-
-				NetworkUtils.sendMessage("DATA", output);
-
-				NetworkUtils.waitMessage(input);
-
-				NetworkUtils.sendMessage("Subject: Example Message", output);
-				NetworkUtils.sendMessage("From: <paco@SMTPSERVER.local>", output);
-				NetworkUtils.sendMessage("To: <rocio@SMTPSERVER.local>", output);
-				NetworkUtils.sendMessage("", output);
-				NetworkUtils.sendMessage("This is the body", output);
-				NetworkUtils.sendMessage(".", output);
-
-				NetworkUtils.waitMessage(input);
-
 				NetworkUtils.sendMessage("QUIT", output);
-
 				NetworkUtils.waitMessage(input); // Bye
-
-				GUI_MAIL = null;
-				
-				}
 				
 				
 		    }  
