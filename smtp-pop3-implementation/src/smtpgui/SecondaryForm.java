@@ -37,7 +37,7 @@ public class SecondaryForm extends JFrame {
 		panel.setLayout(null);
 
 		btnSend.setBounds(10, 10, 150, 150);
-		btnSend.setIcon(new ImageIcon("message.png"));
+		btnSend.setIcon(new ImageIcon("./src/smtpgui/message.png"));
 
 		// First Part
 		lbFrom.setBounds(170, 30, 50, 20);

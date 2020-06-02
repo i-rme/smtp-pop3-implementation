@@ -101,18 +101,3 @@ public class PrimaryLogin extends JFrame {
 		});
 	}
 }
-
-/*
- * public String serverChecker(String a) {
- * 
- * 
- * String r; r = a.substring(a.indexOf("E") + 4);
- * 
- * return r;
- */
-
-//Crear otro textf para el puerto   25
-// Servidor 127.0.0.1
-
-//reformar GuI para borrar el texto
-//mirar lo de al cerrar al QUIT
