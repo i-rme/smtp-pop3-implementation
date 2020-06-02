@@ -36,6 +36,7 @@ public class SmtpClient extends CustomThread {
 	public String GUI_MAIL_TO;
 	public Mail GUI_MAIL = null;
 	
+	// Used by the command line
 	public void run() {
 
 		System.out.println("INFO: Starting the " + SERVICE + " " + TYPE);
@@ -78,8 +79,6 @@ public class SmtpClient extends CustomThread {
 
 		NetworkUtils.waitMessage(input); // Bye
 
-		System.out.println("AQUI no deberia llegar ya que deberia esperar");
-
 		while (true)
 			NetworkUtils.waitMessage(input);
 
@@ -87,6 +86,7 @@ public class SmtpClient extends CustomThread {
 
 	}
 	
+	// Used by the GUI
 	public void start(String hostname, String endpoint, int port) {
 		
 		Thread one = new Thread() {
@@ -98,10 +98,10 @@ public class SmtpClient extends CustomThread {
 				output = NetworkUtils.getOutput(socket);
 
 				NetworkUtils.waitMessage(input);
-				Utils.sleep(100);
+				Utils.sleep(50);
 				NetworkUtils.sendMessage("HELO " + hostname, output);
 				
-				Utils.sleep(100);
+				Utils.sleep(50);
 				NetworkUtils.waitMessage(input);
 				
 				GUI_HAS_CONNECTED = true;
@@ -109,7 +109,7 @@ public class SmtpClient extends CustomThread {
 				while(GUI_HAS_CONNECTED) {
 				
 					while(GUI_MAIL == null) {
-						Utils.sleep(250);
+						Utils.sleep(150);
 						//System.out.println("Waiting GUI_MAIL");
 					}
 					GUI_HAS_SENT = false;
@@ -117,19 +117,19 @@ public class SmtpClient extends CustomThread {
 
 					NetworkUtils.sendMessage("MAIL FROM: <" + GUI_MAIL_FROM + ">", output);
 					
-					Utils.sleep(100);
+					Utils.sleep(50);
 					NetworkUtils.waitMessage(input);
 					NetworkUtils.sendMessage("RCPT TO: <" + GUI_MAIL_TO + ">", output);
 	
-					Utils.sleep(100);
+					Utils.sleep(50);
 					NetworkUtils.waitMessage(input);
 					NetworkUtils.sendMessage("DATA", output);
 	
-					Utils.sleep(100);
+					Utils.sleep(50);
 					NetworkUtils.waitMessage(input);
 					NetworkUtils.sendMessage(GUI_MAIL.toString(), output);
 	
-					Utils.sleep(100);
+					Utils.sleep(50);
 					NetworkUtils.waitMessage(input);
 	
 					GUI_HAS_SENT = true;

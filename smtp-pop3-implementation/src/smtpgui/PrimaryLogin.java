@@ -87,7 +87,7 @@ public class PrimaryLogin extends JFrame {
 					// Main.smtpClient.start(serverName, hostName, 25);
 
 					while (Main.smtpClient.GUI_HAS_CONNECTED == false) {
-						Utils.sleep(500);
+						Utils.sleep(150);
 					}
 
 					SecondaryForm newFrame = new SecondaryForm();
