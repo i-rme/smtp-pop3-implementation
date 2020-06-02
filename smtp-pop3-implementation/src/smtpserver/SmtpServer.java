@@ -24,6 +24,7 @@ public class SmtpServer extends CustomThread {
 	public final String ENDPOINT = "127.0.0.1";
 	public final int RETRY_TIME = 2;
 	public volatile boolean RUNNING = true;
+	public volatile boolean CLIENT_CONNECTED = false;
 	public boolean DEMO = true;
 
 	private ServerSocket serverSocket;
@@ -52,69 +53,60 @@ public class SmtpServer extends CustomThread {
 			output = NetworkUtils.getOutput(socket);
 
 			System.out.println("INFO: Connected sucessfully");
+			CLIENT_CONNECTED = true;
 
 			NetworkUtils.sendMessage("+OK " + HOSTNAME + " Service Ready", output);
 
 			do {
-				endpoint_hostname = NetworkUtils.waitMessageRegex("(HELO) (.*)", input);
-				if (endpoint_hostname != null) {
-					NetworkUtils.sendMessage("250 OK", output);
-				} else {
-					NetworkUtils.sendMessage("500 Unknown command, expecting HELO.", output);
-				}
-			} while (endpoint_hostname == null);
+				String command[] = NetworkUtils.waitMessageRegexArray("((HELO|MAIL FROM|RCPT TO|DATA|QUIT)) ?(.*)", input);
 
-			
-			while (RUNNING) {
-			
-				do {
-					mail_from = NetworkUtils.waitMessageRegex("(MAIL FROM:) <([a-zA-Z0-9]+)@(.*)>", input);
-					if (mail_from != null) {
+				switch (command[2]) {
+					case "HELO":
 						NetworkUtils.sendMessage("250 OK", output);
-					} else {
-						NetworkUtils.sendMessage("500 Unknown command, expecting MAIL FROM.", output);
-					}
-				} while (mail_from == null);
-	
-				do {
-					rcpt_to = NetworkUtils.waitMessageRegex("(RCPT TO:) <([a-zA-Z0-9]+)@(.*)>", input);
-					if (rcpt_to != null) {
-						NetworkUtils.sendMessage("250 OK", output);
-					} else {
-						NetworkUtils.sendMessage("500 Unknown command, expecting RCPT TO.", output);
-					}
-				} while (rcpt_to == null);
-	
-				do {
-					String command[] = NetworkUtils.waitMessageRegexArray("(([a-zA-Z]{4})) ?(.*)?", input);
-	
-					switch (command[2]) {
-	
+						break;
+					case "MAIL FROM":
+						mail_from = NetworkUtils.parseMessageRegex("(MAIL FROM:) <([a-zA-Z0-9]+)@(.*)>", command[0]);
+						if (mail_from != null) {
+							NetworkUtils.sendMessage("250 OK", output);
+						} else {
+							NetworkUtils.sendMessage("500 Unknown command, expecting MAIL FROM.", output);
+						}
+						break;
+					case "RCPT TO":
+						rcpt_to = NetworkUtils.parseMessageRegex("(RCPT TO:) <([a-zA-Z0-9]+)@(.*)>", command[0]);
+						if (rcpt_to != null) {
+							NetworkUtils.sendMessage("250 OK", output);
+						} else {
+							NetworkUtils.sendMessage("500 Unknown command, expecting RCPT TO.", output);
+						}
+						break;
 					case "DATA":
-						NetworkUtils.sendMessage("354 Start mail input; end with <CRLF>.<CRLF>", output);
-						mail = waitMail();
-						deliver(mail);
-						end = true;
+						if(mail_from != null && rcpt_to != null) {
+							NetworkUtils.sendMessage("354 Start mail input; end with <CRLF>.<CRLF>", output);
+							mail = waitMail();
+							deliver(mail);
+							
+							DatabaseUtils.Serialize(server, DATABASE);
+							System.out.println("INFO: " + server.getStatus());
+						}else {
+							NetworkUtils.sendMessage("500 Unknown command, expecting MAIL FROM or RCPT TO.", output);
+						}
 						break;
-	
 					case "QUIT":
+						CLIENT_CONNECTED = false;
 						NetworkUtils.sendMessage("221 " + HOSTNAME + " Service closing transmission channel", output);
-						//end = true;
 						break;
-	
 					case "@error_endpoint_disconnected":
-						end = true;
+						CLIENT_CONNECTED = false;
 						break;
-	
 					default:
-						NetworkUtils.sendMessage("500 Unknown command.", output);
-	
-					}
-					DatabaseUtils.Serialize(server, DATABASE);
-					System.out.println("INFO: " + server.getStatus());
-				} while (mail == null || end == false);
-
-			}
+						//do nothing
+						break;
+				}
+				
+			} while (CLIENT_CONNECTED);
+			
+			System.out.println("INFO: Current client disconnected.");
 			
 			NetworkUtils.closeServerSocket(serverSocket);
 			NetworkUtils.closeSocket(socket);

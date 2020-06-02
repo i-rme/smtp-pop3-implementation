@@ -1,6 +1,7 @@
 package smtpclient;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -21,7 +22,7 @@ public class SmtpClient extends CustomThread {
 	// public final String ENDPOINT = "smtp.unverified.email";
 	// public final String ENDPOINT = "ethereal.email";
 	// public final String ENDPOINT = "mailspons.com";
-	public final int RETRY_TIME = 2;
+	public final int RETRY_TIME = 1;
 
 	public Socket socket;
 	public BufferedReader input;
@@ -79,10 +80,14 @@ public class SmtpClient extends CustomThread {
 
 		NetworkUtils.waitMessage(input); // Bye
 
-		while (true)
-			NetworkUtils.waitMessage(input);
+		System.out.println("INFO: Finished.");
 
-		// socket.close();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	

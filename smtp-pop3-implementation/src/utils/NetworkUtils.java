@@ -155,6 +155,7 @@ public class NetworkUtils {
 		}
 
 	}
+	
 
 	public static String[] waitMessageRegexArray(String pattern, BufferedReader input) {
 		String message = waitMessage(input);

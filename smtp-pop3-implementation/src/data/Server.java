@@ -132,7 +132,7 @@ public class Server implements java.io.Serializable{
 	public String add(User user, Mail mail) {
 		// ADD mail (smtp)
 		user.getMailbox().mails.add(mail);
-		return "250 Requested mail action okay, completed \r\n";
+		return "250 Requested mail action okay, completed";
 	}
 
 	public String reset(User user) {
