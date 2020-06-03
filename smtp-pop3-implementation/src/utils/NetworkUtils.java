@@ -110,10 +110,17 @@ public class NetworkUtils {
 
 	public static String waitMessages(CustomThread thread) {
 		String output = "";
-		long end = System.currentTimeMillis() + 500; // Wait 500ms for more messages
+		long end = System.currentTimeMillis() + 1000; // Wait 1000ms for more messages
 
-		while (System.currentTimeMillis() < end) {
-			output += NetworkUtils.waitMessage(thread) + "\r\n";
+		while (end != 0) {
+			
+			if(output.length() < 3) {
+				output += NetworkUtils.waitMessage(thread) + "\r\n";
+			}else if(!output.substring(output.length() - 3).equals(".\r\n")) {
+				output += NetworkUtils.waitMessage(thread) + "\r\n";
+				NetworkUtils.waitMessage(thread);
+				end = 0;
+			}
 		}
 		return output;
 	}
