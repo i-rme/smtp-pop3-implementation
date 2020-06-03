@@ -20,8 +20,6 @@ public class SmtpClient extends CustomThread {
 	public final String USERNAME = "paco";
 	public final String ENDPOINT = "127.0.0.1";
 	// public final String ENDPOINT = "smtp.unverified.email";
-	// public final String ENDPOINT = "ethereal.email";
-	// public final String ENDPOINT = "mailspons.com";
 	public final int RETRY_TIME = 1;
 
 	public Socket socket;
@@ -52,11 +50,9 @@ public class SmtpClient extends CustomThread {
 
 		NetworkUtils.waitMessage(input);
 		Utils.sleep(2000);
-		// NetworkUtils.sendMessage("QUIT", output);
 		NetworkUtils.sendMessage("MAIL FROM: <" + USERNAME + "@SMTPSERVER.local>", output);
 
 		NetworkUtils.waitMessage(input);
-		// NetworkUtils.waitMessage(input);
 
 		Utils.sleep(2000);
 		NetworkUtils.sendMessage("RCPT TO: <rocio@SMTPSERVER.local>", output);
@@ -103,10 +99,10 @@ public class SmtpClient extends CustomThread {
 				output = NetworkUtils.getOutput(socket);
 
 				NetworkUtils.waitMessage(input);
-				Utils.sleep(50);
+				Utils.sleep(100);
 				NetworkUtils.sendMessage("HELO " + hostname, output);
 				
-				Utils.sleep(50);
+				Utils.sleep(100);
 				NetworkUtils.waitMessage(input);
 				
 				GUI_HAS_CONNECTED = true;
@@ -114,7 +110,7 @@ public class SmtpClient extends CustomThread {
 				while(GUI_HAS_CONNECTED) {
 				
 					while(GUI_MAIL == null) {
-						Utils.sleep(150);
+						Utils.sleep(100);
 						//System.out.println("Waiting GUI_MAIL");
 					}
 					GUI_HAS_SENT = false;
@@ -122,19 +118,25 @@ public class SmtpClient extends CustomThread {
 
 					NetworkUtils.sendMessage("MAIL FROM: <" + GUI_MAIL_FROM + ">", output);
 					
-					Utils.sleep(50);
+					Utils.sleep(100);
 					NetworkUtils.waitMessage(input);
 					NetworkUtils.sendMessage("RCPT TO: <" + GUI_MAIL_TO + ">", output);
 	
-					Utils.sleep(50);
+					Utils.sleep(100);
 					NetworkUtils.waitMessage(input);
 					NetworkUtils.sendMessage("DATA", output);
 	
-					Utils.sleep(50);
+					Utils.sleep(100);
 					NetworkUtils.waitMessage(input);
-					NetworkUtils.sendMessage(GUI_MAIL.toString(), output);
+					
+					String lines[] = GUI_MAIL.toString().split("\\r?\\n");
+					
+					for (String message: lines) {
+						NetworkUtils.sendMessage(message, output);
+					}
+					//NetworkUtils.sendMessage(GUI_MAIL.toString(), output);
 	
-					Utils.sleep(50);
+					Utils.sleep(100);
 					NetworkUtils.waitMessage(input);
 	
 					GUI_HAS_SENT = true;
