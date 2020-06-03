@@ -11,14 +11,12 @@ import utils.Utils;
 public class Pop3Client extends CustomThread {
 
 	public final int PORT = 110;
-	// private final int PORT = 1100;
 	public static final String TYPE = "CLIENT";
 	public static final String SERVICE = "POP3";
 	public final String HOSTNAME = SERVICE + TYPE + ".local";
-	// private final String DATABASE = "database.txt";
 	private final String ENDPOINT = "127.0.0.1";
-	// private final String ENDPOINT = "pop3.mailtrap.io";
-	private final int RETRY_TIME = 2;
+	// private final String ENDPOINT = "pop.mailspons.com";
+	private final int RETRY_TIME = 1;
 	public volatile boolean RUNNING = true;
 
 	private Socket socket;
